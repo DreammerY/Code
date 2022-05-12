@@ -6,6 +6,7 @@
                     <el-image
                     style="width: 100px; height: 50px"
                     :src="url"
+                    :preview-src-list="[url]"
                     :fit="fit"></el-image>
                     <div class="img_desc">
                         <span>{{ fit }}</span>
@@ -23,10 +24,6 @@ export default {
             default:false,
             Type:Boolean
         },
-        rowCount:{
-            default:6,
-            Type:Number
-        }
     },
     data(){
         return {
