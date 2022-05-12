@@ -33,34 +33,13 @@
              </div>
              <el-button type="primary" class="submit">提交</el-button>
         </div>
-        <!-- main -->
-        <!-- <div class="main">
-            <div class="image_lists" v-for="fit in fits" :key="fit.key">
-                <el-image
-                style="width: 200px; height: 100px"
-                :src="url"
-                :fit="fit"></el-image>
-                <div class="img_desc">
-                    <span>{{ fit }}</span>
-                    <el-checkbox class="check_box"></el-checkbox>
-                </div>
-            </div>
-            <div class="main_bottom">
-                <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[10, 20, 30, 50]"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
-                </el-pagination>
-            </div>
-        </div> -->
         <imgListVue></imgListVue>
+        <paginationVue></paginationVue>
     </div>
 </template>
 <script>
-import imgListVue from './imgList.vue';
+import paginationVue from '@/components/pagination.vue';
+import imgListVue from '../../components/imgList.vue';
 export default {
     data(){
         return {
@@ -103,10 +82,11 @@ export default {
     },
     components:{
         imgListVue,
+        paginationVue,
     }
 }
 </script>
-<style>
+<style scoped>
 .top{
     display: flex;
     justify-content: flex-start;
@@ -126,22 +106,6 @@ export default {
 .top .submit{
     margin-left: 50px;
 }
-/* main */
-.main{
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    margin-top: 20px;
-}
-.main .image_lists{
-    width: 20%;
-    text-align: center;
-}
-.main .image_lists .check_box{
-    margin-left: 10px;
-}
-.main_bottom{
-    margin-top: 20px;
-}
+
 
 </style>

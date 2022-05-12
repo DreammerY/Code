@@ -1,34 +1,36 @@
 <template>
     <div class="createface">
         <div class="main">
-            <div class="image_lists" v-for="fit in fits" :key="fit.key">
-                <el-image
-                style="width: 200px; height: 100px"
-                :src="url"
-                :fit="fit"></el-image>
-                <div class="img_desc">
-                    <span>{{ fit }}</span>
-                    <el-checkbox class="check_box"></el-checkbox>
+            <div class="image_lists">
+                <div class="image_list" ref="image_list" v-for="fit in fits" :key="fit.key">
+                    <el-image
+                    style="width: 100px; height: 50px"
+                    :src="url"
+                    :fit="fit"></el-image>
+                    <div class="img_desc">
+                        <span>{{ fit }}</span>
+                        <el-checkbox class="check_box" v-if="havecheckbox"></el-checkbox>
+                    </div>
                 </div>
-            </div>
-            <div class="main_bottom">
-                <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[10, 20, 30, 50]"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
-                </el-pagination>
             </div>
         </div>
     </div>
 </template>
 <script>
 export default {
+    props:{
+        havecheckbox:{
+            default:false,
+            Type:Boolean
+        },
+        rowCount:{
+            default:6,
+            Type:Number
+        }
+    },
     data(){
         return {
-            fits: ['fill', 'contewqeqewwain', 'cover', 'none', 'scale-down', 'scale-down', 'scale-down','scale-down', 'scale-down', 'scale-down','scale-down', 'scale-down', 'scale-down', 'scale-down', 'scale-down'],
+            fits: ['fill', 'cover', 'none', 'scale-down', 'scale-down', 'scale-down', 'scale-down', 'scale-down','scale-down', 'scale-down', 'scale-down', 'scale-down', 'scale-down'],
             url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
             currentPage: 1,
         }
@@ -46,23 +48,28 @@ export default {
     },
 }
 </script>
-<style>
+<style scoped>
 
 .main{
     display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    margin-top: 20px;
+    flex-direction: column;
+    margin-top: 10px;
 }
 .main .image_lists{
-    width: 20%;
+    display: flex;
+    justify-content: left;
+    flex-wrap: wrap;
+    width: 100%;
+}
+.main .image_list{
     text-align: center;
+    margin-bottom: 10px;
+    margin: 10px;
+    padding: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
 }
-.main .image_lists .check_box{
+.main .image_list .check_box{
     margin-left: 10px;
-}
-.main_bottom{
-    margin-top: 20px;
 }
 
 </style>

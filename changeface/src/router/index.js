@@ -1,37 +1,56 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/home',
-    name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-    }
-  },
-  {
     path: '/createface',
     name: 'createface',
     component: function () {
-      return import('../components/createFace.vue')
+      return import('../views/changface/createFace.vue')
     }
   },
   {
     path: '/collectface',
     name: 'collectface',
     component: function () {
-      return import('../components/collectFace.vue')
+      return import('../views/changface/collectFace.vue')
+    }
+  },
+  {
+    path: '/changeface',
+    name: 'changeface',
+    component: function () {
+      return import('../views/changface/changeFace.vue')
+    }
+  },
+  {
+    path: '/cutperson',
+    name: 'cutperson',
+    component: function () {
+      return import('../views/replacebackground/cutPerson.vue')
+    }
+  },
+  {
+    path: '/replacebackground',
+    name: 'replacebackground',
+    component: function () {
+      return import('../views/replacebackground/replacebackground.vue')
+    }
+  },
+  {
+    path: '/addbackground',
+    name: 'addbackground',
+    component: function () {
+      return import('../views/backgroundmanage/addbackground.vue')
+    }
+  },
+  {
+    path: '/backgroundlist',
+    name: 'backgroundlist',
+    component: function () {
+      return import('../views/backgroundmanage/backgroundlist.vue')
     }
   }
 ]

@@ -3,22 +3,24 @@
         <div class="top">
             <div class="top_checkbox">
                 <el-checkbox class="check_box">全选</el-checkbox>
-                <el-checkbox class="check_box">反选</el-checkbox>
             </div>
             <el-button type="primary" class="cancel_collect">取消收藏</el-button>
         </div>
-        <imgListVue></imgListVue>
+        <imgListVue :havecheckbox="true"></imgListVue>
+        <paginationVue></paginationVue>
     </div>
 </template>
 <script>
-import imgListVue from './imgList.vue'
+import paginationVue from '@/components/pagination.vue'
+import imgListVue from '../../components/imgList.vue'
 export default {
     components:{
         imgListVue,
+        paginationVue,paginationVue
     }
 }
 </script>
-<style>
+<style scoped>
 .collectface .top{
   display: flex;
   justify-content: space-between;
