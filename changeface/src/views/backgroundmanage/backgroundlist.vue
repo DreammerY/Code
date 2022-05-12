@@ -38,8 +38,8 @@
                 </div>
             </div>
             <div class="right">
-                <el-button>自动生成</el-button>
-                <el-button>自动生成</el-button>
+                <el-button>开始搜索</el-button>
+                <el-button>新增背景</el-button>
             </div>
         </div>
         <!--  -->

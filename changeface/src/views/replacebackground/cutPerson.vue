@@ -2,7 +2,15 @@
     <div class="cutperson">
         <div class="cutperson_top">
             <div class="top">
-                <el-button>上传图片</el-button>
+                <el-upload
+                        action=""
+                        multiple
+                        list-type="picture"
+                        :show-file-list="false"
+                        :auto-upload="false"
+                        :limit="3">
+                        <el-button>上传图片</el-button>
+                    </el-upload>
                 <el-button class="margin">开始生成</el-button>
                 <paginationVue style="margin-top:0"></paginationVue>
             </div>

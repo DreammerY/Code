@@ -3,7 +3,15 @@
         <div class="top">
             <div class="top_left">
                 <div class="top_left_btn">
-                    <el-button>上传图片</el-button>
+                    <el-upload
+                        action=""
+                        multiple
+                        list-type="picture"
+                        :show-file-list="false"
+                        :auto-upload="false"
+                        :limit="3">
+                        <el-button>上传图片</el-button>
+                    </el-upload>
                 </div>
                 <imgListVue></imgListVue>
                 <paginationVue></paginationVue>

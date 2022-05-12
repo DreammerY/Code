@@ -4,7 +4,16 @@
             <div class="top_left">
                 <div class="top_left_list">
                     <el-button>分割结果导入</el-button>
-                    <el-button style="margin:0 20px">上传图片</el-button>
+                    <el-upload
+                        action=""
+                        multiple
+                        list-type="picture"
+                        :show-file-list="false"
+                        :auto-upload="false"
+                        style="margin:0 20px"
+                        :limit="3">
+                        <el-button>上传图片</el-button>
+                    </el-upload>
                     <div class="input">
                         <span>身高：</span>
                         <el-input
