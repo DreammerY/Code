@@ -83,6 +83,11 @@ export default {
     components:{
         imgListVue,
         paginationVue,
+    },
+    mounted(){
+        this.axios.get("test/api/scene/person_analysis/").then((res) => {
+            console.log(res);
+        })
     }
 }
 </script>

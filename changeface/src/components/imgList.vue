@@ -2,15 +2,15 @@
     <div class="createface">
         <div class="main">
             <div class="image_lists">
-                <div class="image_list" ref="image_list" v-for="fit in fits" :key="fit.key">
+                <div class="image_list" v-for="(fit,index) in fits" :key="fit.key">
                     <el-image
-                    style="width: 100px; height: 50px"
+                    style="width: 120px; height: 50px"
                     :src="url"
                     :preview-src-list="[url]"
                     :fit="fit"></el-image>
                     <div class="img_desc">
                         <span>{{ fit }}</span>
-                        <el-checkbox class="check_box" v-if="havecheckbox"></el-checkbox>
+                        <el-checkbox class="check_box" ref="img_check_box" v-if="havecheckbox" @change="handleCheckBox(index)"></el-checkbox>
                     </div>
                 </div>
             </div>
@@ -41,6 +41,18 @@ export default {
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
+        },
+        handleCheckBox(index){
+            console.log(index);
+            const list = this.$refs.img_check_box
+            if(list[index].ischecked == true){
+               console.log(list);
+               list.forEach((item,i) => {
+                  if(i!=index){
+                       item.ischecked = false
+                  }
+               })
+            }
         }
     },
 }
