@@ -2,9 +2,6 @@
     <div class="createface">
         <div class="top">
             <div class="top_model">
-                <!-- <el-radio-group v-model="select_model_type" @change="handleTypesChange" v-for="item in model_types" :key="item.id">
-                    <el-radio-button :label="item"></el-radio-button>
-                </el-radio-group> -->
                 <span>选择类型：</span>
                 <el-select v-model="value" placeholder="请选择">
                     <el-option
@@ -18,7 +15,7 @@
              <div class="input input1">
                 <span>seends_start1：</span>
                 <el-input
-                    v-model="input1"
+                    v-model.number="input1"
                     clearable
                     class="input_input">
                 </el-input>
@@ -26,14 +23,15 @@
              <div class="input">
                 <span>seends_start2：</span>
                 <el-input
-                    v-model="input2"
+                    v-model.number="input2"
                     clearable
                     class="input_input">
                 </el-input>
              </div>
-             <el-button type="primary" class="submit">提交</el-button>
+             <el-button type="primary" class="submit" @click="submit" v-loading.fullscreen.lock="fullscreenLoading">提交</el-button>
         </div>
-        <imgListVue></imgListVue>
+        <!-- <img  :src="require('../../../results/00063-generate-images/seed0005.png')" alt=""> -->
+        <imgListVue :imgList="imgList"></imgListVue>
         <paginationVue></paginationVue>
     </div>
 </template>
@@ -43,30 +41,12 @@ import imgListVue from '../../components/imgList.vue';
 export default {
     data(){
         return {
-            select_model_type: "上海",
-            model_types: ["上海","北京","广州","深圳"],
             input1: "",
             input2: "",
-            fits: ['fill', 'contewqeqewwain', 'cover', 'none', 'scale-down', 'scale-down', 'scale-down','scale-down', 'scale-down', 'scale-down','scale-down', 'scale-down', 'scale-down', 'scale-down', 'scale-down'],
-            url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-            currentPage: 1,
-             options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: ''
+            options: [],
+            value: '',
+            fullscreenLoading: false,
+            imgList:[],
         }
     },
     methods:{
@@ -78,6 +58,60 @@ export default {
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
+        },
+        submit(){
+            if(this.input1 >= this.input2 || this.value=='' || typeof this.input1 != "number" || typeof this.input2 != "number") {
+                this.$message.error('输入有误');
+                return
+            }
+            this.getImgList()
+        },
+        // 获取模型下拉内容
+        getModelList(){
+            this.axios.get("/test/api/v1/index").then((res) => {
+                if(res && res.data){
+                    this.options = res.data.pkl_list.map(item => {
+                        return {value:item,label:item}
+                    });
+                 }
+            }).catch(() => {
+                this.$message.error('模型列表获取失败');
+            })
+        },
+        // 获取图片列表
+        getImgList(){
+            this.fullscreenLoading = true
+            var params = {
+                pkl:this.value,
+                start:this.input1,
+                end:this.input2
+            }
+            this.axios.post("/test/api/v1/index",params).then((res) => {
+                if(res && res.data){
+                    this.fullscreenLoading = false
+                   this.getImgList2()
+                }
+            }).catch(() => {
+                this.fullscreenLoading = false
+                this.$message.error('图片列表获取失败');
+            })
+        },
+        getImgList2(){
+            this.axios.get("/test/api/v1/image").then((res) => {
+                if(res && res.data.select_image_list){
+                    this.imgList =  res.data.select_image_list.map(item => {
+                        var imgname = item.substring(item.lastIndexOf("/")+1,item.length).split('.')[0]
+                        var imgurl = '../../results/'+item
+                        return {
+                            img_name: imgname,
+                            url: imgurl,
+                        };
+                    })
+                    console.log(this.imgList);
+                }
+            }).catch(() => {
+                this.$message.error('人脸图片列表获取失败');
+            })
         }
     },
     components:{
@@ -85,9 +119,7 @@ export default {
         paginationVue,
     },
     mounted(){
-        this.axios.get("test/api/scene/person_analysis/").then((res) => {
-            console.log(res);
-        })
+        this.getModelList()
     }
 }
 </script>
