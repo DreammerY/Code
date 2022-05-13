@@ -6,7 +6,7 @@
                 <div class="image_list" v-for="(item,index) in imgList" :key="item.key">
                     <el-image
                     style="width: 80px; height: 120px"
-                    :src="require(item.url)"
+                    :src="item.url"
                     :preview-src-list='[item.url]'
                     fit="cover"></el-image>
                     <div class="img_desc">

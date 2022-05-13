@@ -101,7 +101,7 @@ export default {
                 if(res && res.data.select_image_list){
                     this.imgList =  res.data.select_image_list.map(item => {
                         var imgname = item.substring(item.lastIndexOf("/")+1,item.length).split('.')[0]
-                        var imgurl = '../../results/'+item
+                        var imgurl = require('../../../results/'+item)
                         return {
                             img_name: imgname,
                             url: imgurl,
