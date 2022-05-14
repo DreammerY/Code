@@ -6,7 +6,7 @@
             </div>
             <el-button type="primary" class="cancel_collect">取消收藏</el-button>
         </div>
-        <imgListVue :havecheckbox="true"></imgListVue>
+        <imgListVue :imgList="collectedList" :havecheckbox="true"></imgListVue>
         <paginationVue></paginationVue>
     </div>
 </template>
@@ -14,6 +14,35 @@
 import paginationVue from '@/components/pagination.vue'
 import imgListVue from '../../components/imgList.vue'
 export default {
+    data(){
+        return {
+            collectedList:[]
+        }
+    },
+    methods:{
+        // 获取图片收藏列表
+        getCollectedImgs(){
+            this.axios.get("/test/api/v1/select_image").then((res) => {
+                if(res && res.data){
+                   console.log(res);
+                   this.collectedList = res.data.pkl_list.map(item => {
+                        var imgname = item.substring(item.lastIndexOf("/")+1,item.length).split('.')[0]
+                        var imgurl = require('../../../results/results/'+'65etr-dwdhuyx.png')
+                        return {
+                            img_name: imgname,
+                            url: imgurl
+                        }
+                   })
+                   console.log(this.collectedList);
+                }
+            }).catch(() => {
+                this.$message.error('获取图片收藏列表失败');
+            })
+        }
+    },
+    mounted(){
+        this.getCollectedImgs()
+    },
     components:{
         imgListVue,
         paginationVue,paginationVue

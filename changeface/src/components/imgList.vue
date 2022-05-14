@@ -2,16 +2,18 @@
     <div class="createface">
         <div class="main">
             <div class="image_lists">
-                <!-- <img :src="require('')" alt=""> -->
                 <div class="image_list" v-for="(item,index) in imgList" :key="item.key">
                     <el-image
                     style="width: 80px; height: 120px"
                     :src="item.url"
                     :preview-src-list='[item.url]'
                     fit="cover"></el-image>
-                    <div class="img_desc">
+                    <div class="img_desc"  style="width: 80px;">
                         <span>{{ item.img_name }}</span>
-                        <input type="checkbox" ref="img_check_box" v-if="havecheckbox" @change="handleCheckBox(index)">
+                        <!-- 收藏 -->
+                        <input type="checkbox" ref="img_check_box" v-if="havecheckbox && collection" @change="handleCheckBox1(index,item.url2)">
+                        <!-- 单选 -->
+                        <input type="checkbox" ref="img_check_box" v-if="havecheckbox && !collection" @change="handleCheckBox2(index)">
                     </div>
                 </div>
             </div>
@@ -25,17 +27,25 @@ export default {
             default:false,
             Type:Boolean
         },
+        collection:{
+            default:false,
+            Type:Boolean
+        },
         imgList:{
             default:() => {
                 return [
-                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png')},
-                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png')},
-                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png')},
-                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png')},
-                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png')},
-                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png')},
-                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png')},
-                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png')},
+                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
                 ]
             },
         }
@@ -43,7 +53,6 @@ export default {
     data(){
         return {
             currentPage: 1,
-            publicPath: '../../'
         }
     },
     methods:{
@@ -56,22 +65,59 @@ export default {
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
         },
-        handleCheckBox(index){
+        // 收藏复选框
+        handleCheckBox1(index,url2){
             const list = this.$refs.img_check_box
             if(list[index].checked == true){
-               list.forEach((item,i) => {
-                  if(i!=index){
-                       item.checked = false
-                  }
-               })
+                this.$confirm('收藏该照片, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'info'
+                }).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '收藏成功!'
+                    });
+                    list.forEach((item,i) => {
+                        if(i!=index){
+                            item.checked = false
+                        }
+                    })
+                    this.collectImg(url2)
+                }).catch(() => {
+                    this.$message({
+                    type: 'info',                
+                    message: '已取消收藏'
+                });
+                list.forEach((item,i) => {
+                    item.checked = false
+                })       
+            });
             }
+        },
+        // 单选复选框
+        handleCheckBox2(index){
+            const list = this.$refs.img_check_box
+            list.forEach((item,i) => {
+                if(i!=index){
+                    item.checked = false
+                }
+            })
+        },
+        // 收藏图片
+        collectImg(url2){
+            var param = {
+                filename:url2
+            }
+            this.axios.post("/test/api/v1/image",param).then((res) => {
+                if(res && res.data.code == 0){
+                   this.$router.push({name:'collectface'})
+                 }
+            }).catch(() => {
+                this.$message.error('图片收藏失败');
+            })
         }
     },
-    watch:{
-        imgList(){
-            console.log(this.imgList);
-        }
-    }
 }
 </script>
 <style scoped>
@@ -96,6 +142,21 @@ export default {
 }
 .main .image_list .check_box{
     margin-left: 10px;
+}
+.main .image_list .img_desc{
+  display: flex;
+  justify-content: space-between;
+}
+.main .image_list .img_desc input{
+    width: 15px;    
+}
+.main .image_list .img_desc span{
+    flex:1;
+    /* display: inline-block; */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow:ellipsis;
+    
 }
 
 </style>

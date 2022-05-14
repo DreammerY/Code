@@ -1,29 +1,29 @@
 <template>
-    <div class="changeface">
+    <div class="changeface" v-loading.fullscreen.lock="fullscreenLoading">
         <div class="top">
             <div class="top_left">
                 <div class="top_left_btn">
                     <el-upload
-                        action=""
+                        action="/test/api/v1/dfl"
                         multiple
                         list-type="picture"
                         :show-file-list="false"
-                        :auto-upload="false"
-                        :limit="3">
+                        :on-error="hangleError"
+                        :on-success="handleSuccess">
                         <el-button>上传图片</el-button>
                     </el-upload>
                 </div>
-                <imgListVue></imgListVue>
+                <imgListVue :imgList="collectedList"></imgListVue>
                 <paginationVue></paginationVue>
             </div>
             <div class="top_right">
                  <div class="top_right_btn">
-                    <el-button>开始生成</el-button>
+                    <el-button @click="generateImgs">开始生成</el-button>
                     <el-button>多图下载</el-button>
                     <el-button>打包下载</el-button>
                 </div>
-                <imgListVue></imgListVue>
-                 <paginationVue></paginationVue>
+                <imgListVue :imgList="generateList"></imgListVue>
+                <paginationVue></paginationVue>
             </div>
         </div>
         <div class="bottom">
@@ -43,6 +43,71 @@
 import imgListVue from '@/components/imgList.vue'
 import paginationVue from '@/components/pagination.vue'
 export default {
+    data(){
+        return {
+           collectedList: [],
+           generateList: [],
+           fullscreenLoading: false,
+        }
+    },
+    methods:{
+        handleSuccess(response, file){
+            if(response.code == 0){
+                var newLoadImgs = {
+                    url: file.url,
+                    img_name: file.name
+                }
+                this.collectedList = [newLoadImgs,...this.collectedList]
+            }
+        },
+        hangleError(){
+            this.$message("图片上传失败")
+        },
+        // 生成图片
+        generateImgs(){
+            this.axios.post("/test/api/v1/dfl",{submit_cut_photo:true}).then((res) => {
+                this.fullscreenLoading = true
+                if(res && res.data.code==0){
+                    this.queryFaceResult()
+                }
+            }).catch(() => {
+                this.$message.error('生成图片失败');
+            })
+        },
+        // 查询人脸结果
+        queryFaceResult(){
+            this.axios.get("/test/api/v1/result/face").then((res) => {
+                if(res){
+                    this.fullscreenLoading = false
+                    console.log(res);
+                }
+            }).catch(() => {
+                this.fullscreenLoading = false
+                this.$message.error('查询人脸结果失败');
+            })
+        },
+        // 获取收藏图片列表
+        getCollectedImgs(){
+            this.axios.get("/test/api/v1/select_image").then((res) => {
+                if(res && res.data){
+                   this.collectedList = res.data.pkl_list.map(item => {
+                        var imgname = item.substring(item.lastIndexOf("/")+1,item.length).split('.')[0]
+                        var imgurl = require('../../../results/results/'+'65etr-dwdhuyx.png')
+                        return {
+                            img_name: imgname,
+                            url: imgurl
+                        }
+                   })
+                   console.log(this.collectedList);
+                }
+            }).catch(() => {
+                this.$message.error('获取图片收藏列表失败');
+            })
+        }
+    },
+    created(){
+        this.getCollectedImgs()
+    },
     components:{
         imgListVue,
         paginationVue,

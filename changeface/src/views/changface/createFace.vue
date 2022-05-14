@@ -31,7 +31,7 @@
              <el-button type="primary" class="submit" @click="submit" v-loading.fullscreen.lock="fullscreenLoading">提交</el-button>
         </div>
         <!-- <img  :src="require('../../../results/00063-generate-images/seed0005.png')" alt=""> -->
-        <imgListVue :imgList="imgList"></imgListVue>
+        <imgListVue :imgList="imgList" :havecheckbox="true" :collection="true"></imgListVue>
         <paginationVue></paginationVue>
     </div>
 </template>
@@ -41,8 +41,8 @@ import imgListVue from '../../components/imgList.vue';
 export default {
     data(){
         return {
-            input1: "",
-            input2: "",
+            input1: 0,
+            input2: 5,
             options: [],
             value: '',
             fullscreenLoading: false,
@@ -105,9 +105,9 @@ export default {
                         return {
                             img_name: imgname,
                             url: imgurl,
+                            url2: item,
                         };
                     })
-                    console.log(this.imgList);
                 }
             }).catch(() => {
                 this.$message.error('人脸图片列表获取失败');
