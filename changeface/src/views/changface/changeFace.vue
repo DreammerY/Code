@@ -3,15 +3,19 @@
         <div class="top">
             <div class="top_left">
                 <div class="top_left_btn">
-                    <el-upload
+                    <!-- <el-upload
                         action="/test/api/v1/dfl"
                         multiple
+                        :auto-upload="false"
                         list-type="picture"
                         :show-file-list="false"
                         :on-error="hangleError"
+                        :on-change="handleChange"
                         :on-success="handleSuccess">
                         <el-button>上传图片</el-button>
-                    </el-upload>
+                    </el-upload> -->
+                    <input type="file" value="上传图片" multiple @change="selfhandleChange" id="upload">
+                    <el-button @click="uploadImgs">上传图片</el-button>
                 </div>
                 <imgListVue :imgList="collectedList"></imgListVue>
                 <paginationVue></paginationVue>
@@ -48,21 +52,52 @@ export default {
            collectedList: [],
            generateList: [],
            fullscreenLoading: false,
+           clickUpload:false,
         }
     },
     methods:{
-        handleSuccess(response, file){
-            if(response.code == 0){
-                var newLoadImgs = {
-                    url: file.url,
-                    img_name: file.name
-                }
-                this.collectedList = [newLoadImgs,...this.collectedList]
+        selfhandleChange(e){
+            if(!e.target.files){
+                return;
             }
+            let files = e.target.files
+            console.log(files);
+            let formdata = new FormData()
+            Array.from(e.target.files).map(item => {
+                formdata.append("file", item)  //将每一个文件图片都加进formdata
+                // formdata.append('name',"sbdoubao")
+            })
+            this.axios.post("/test/api/v1/dfl", formdata)
+            .then(() => { 
+               var newLoadImgs = Array.from(files).map(item => {
+                    return {
+                        url: URL.createObjectURL(item),
+                        img_name: item.name
+                    }
+                })
+                this.collectedList = [...newLoadImgs,...this.collectedList]
+            }).catch(() => {
+                this.$message("图片上传失败")
+            })
         },
-        hangleError(){
-            this.$message("图片上传失败")
+        uploadImgs(){
+            document.getElementById('upload').click();
         },
+        // handleChange(file){
+        //     console.log(file);
+        // },
+        // handleSuccess(response, file){
+        //     if(response.code == 0){
+        //         var newLoadImgs = {
+        //             url: file.url,
+        //             img_name: file.name
+        //         }
+        //         this.collectedList = [newLoadImgs,...this.collectedList]
+        //     }
+        // },
+        // hangleError(){
+        //     this.$message("图片上传失败")
+        // },
         // 生成图片
         generateImgs(){
             this.axios.post("/test/api/v1/dfl",{submit_cut_photo:true}).then((res) => {
@@ -126,6 +161,10 @@ export default {
     margin-right: 5px;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     flex:1;
+}
+.changeface .top_left #upload{
+    height: 0;
+    width: 0;
 }
 .changeface .top_left_btn,.top_right_btn{
     display: flex;

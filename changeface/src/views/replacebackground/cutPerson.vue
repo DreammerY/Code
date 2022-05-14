@@ -2,7 +2,7 @@
     <div class="cutperson">
         <div class="cutperson_top">
             <div class="top">
-                <el-upload
+                <!-- <el-upload
                         action=""
                         multiple
                         list-type="picture"
@@ -10,7 +10,9 @@
                         :auto-upload="false"
                         :limit="3">
                         <el-button>上传图片</el-button>
-                    </el-upload>
+                </el-upload> -->
+                <input type="file" value="上传图片" multiple @change="selfhandleChange" id="upload" style="width:0;height:0">
+                <el-button @click="uploadImgs">上传图片</el-button>
                 <el-button class="margin">开始生成</el-button>
                 <paginationVue style="margin-top:0"></paginationVue>
             </div>
@@ -36,6 +38,24 @@
 import imgListVue from "@/components/imgList.vue"
 import paginationVue from '@/components/pagination.vue'
 export default {
+    methods:{
+        selfhandleChange(e){
+            // let formdata = new FormData()
+            // Array.from(e.target.files).map(item => {
+            //     formdata.append("file", item)  //将每一个文件图片都加进formdata
+            //     // formdata.append('name',"sbdoubao")
+            // })
+            // this.axios.post("/test/api/v1/dfl", formdata)
+            // .then(res => { 
+            //     console.log(res) 
+            // }).catch(() => {
+            //     this.$message("图片上传失败")
+            // })
+        },
+        uploadImgs(){
+            document.getElementById('upload').click();
+        },
+    },
     components:{
         imgListVue,
         paginationVue,
