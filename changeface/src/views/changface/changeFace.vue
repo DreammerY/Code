@@ -61,7 +61,6 @@ export default {
                 return;
             }
             let files = e.target.files
-            console.log(files);
             let formdata = new FormData()
             Array.from(e.target.files).map(item => {
                 formdata.append("file", item)  //将每一个文件图片都加进formdata
@@ -101,7 +100,6 @@ export default {
         // 生成图片
         generateImgs(){
             this.axios.post("/test/api/v1/dfl",{submit_cut_photo:true}).then((res) => {
-                this.fullscreenLoading = true
                 if(res && res.data.code==0){
                     this.queryFaceResult()
                 }
@@ -111,10 +109,23 @@ export default {
         },
         // 查询人脸结果
         queryFaceResult(){
+            this.fullscreenLoading = true
             this.axios.get("/test/api/v1/result/face").then((res) => {
                 if(res){
-                    this.fullscreenLoading = false
+                    if(!res || !res.data) return
                     console.log(res);
+                    this.fullscreenLoading = false
+                    this.generateList = res.data.select_image_list.map(item => {
+                        // var imgname = item.substring(item.lastIndexOf("/")+1,item.length).split('.')[0]
+                        var url = '../../../' + res.data.results_path + '/' + item
+                        console.log(url);
+
+                        var imgurl = require('../../../workspace/data_dst/results/seed0006.png')
+                        return {
+                            img_name: item,
+                            url: imgurl
+                        }
+                   })
                 }
             }).catch(() => {
                 this.fullscreenLoading = false
