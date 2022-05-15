@@ -99,9 +99,17 @@ export default {
         getImgList2(){
             this.axios.get("/test/api/v1/image").then((res) => {
                 if(res && res.data.select_image_list){
+                    var imgname = ""
+                    var imgurl = ""
                     this.imgList =  res.data.select_image_list.map(item => {
-                        var imgname = item.substring(item.lastIndexOf("/")+1,item.length).split('.')[0]
-                        var imgurl = require('../../../results/'+item)
+                        if(this.myenv == "win"){
+                            imgname = item.substring(item.lastIndexOf("/")+1,item.length).split('.')[0]
+                            imgurl = require('../../../results/'+item)
+                           
+                        } else{
+                            imgname = item.substring(item.lastIndexOf("\\")+1,item.length).split('.')[0]
+                            imgurl = require('..\\..\\..\\results\\'+item)
+                        }
                         return {
                             img_name: imgname,
                             url: imgurl,

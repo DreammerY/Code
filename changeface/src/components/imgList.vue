@@ -113,7 +113,7 @@ export default {
                     this.chooseCollectedFace(url2)
                 }).catch(() => {
                     this.$message({
-                    type: 'error',                
+                    type: 'info',                
                     message: '已取消'
                 });
                 list.forEach((item,i) => {

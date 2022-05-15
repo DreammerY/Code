@@ -26,10 +26,16 @@ export default {
         getCollectedImgs(){
             this.axios.get("/test/api/v1/select_image").then((res) => {
                 if(res && res.data){
-                   console.log(res);
-                   this.collectedList = res.data.pkl_list.map(item => {
-                        var imgname = item.substring(item.lastIndexOf("/")+1,item.length).split('.')[0]
-                        var imgurl = require('../../../results/results/'+'65etr-dwdhuyx.png')
+                    var imgname = ""
+                    var imgurl = ""
+                    this.collectedList = res.data.pkl_list.map(item => {
+                        if(this.myenv == "win"){
+                            imgname = item.substring(item.lastIndexOf("/")+1,item.length).split('.')[0]
+                            imgurl = require('../../../results/results/'+'65etr-dwdhuyx.png')
+                        }else{
+                            imgname = item.substring(item.lastIndexOf("\\")+1,item.length).split('.')[0]
+                            imgurl = require('..\\..\\..\\results\\results\\'+item)
+                        }
                         return {
                             img_name: imgname,
                             url: imgurl,

@@ -125,11 +125,18 @@ export default {
                     console.log(res);
                     this.fullscreenLoading = false
                     this.generateList = res.data.select_image_list.map(item => {
-
-                        return {
-                            img_name: item,
-                            url: require('../../../workspace/data_dst/results/' + item)
+                        if(this.myenv == "win"){
+                             return {
+                                img_name: item,
+                                url: require('../../../workspace/data_dst/results/' + item)
+                            }
+                        }else{
+                            return {
+                                img_name: item,
+                                url: require('..\\..\\..\\workspace\\data_dst\\results\\' + item)
+                            }
                         }
+                        
                    })
                    console.log(this.generateList );
                 }
@@ -143,9 +150,16 @@ export default {
         getCollectedImgs(){
             this.axios.get("/test/api/v1/select_image").then((res) => {
                 if(res && res.data){
-                   this.collectedList = res.data.pkl_list.map(item => {
-                        var imgname = item.substring(item.lastIndexOf("/")+1,item.length).split('.')[0]
-                        var imgurl = require('../../../results/results/'+'65etr-dwdhuyx.png')
+                    var imgname = ""
+                    var imgurl = ""
+                    this.collectedList = res.data.pkl_list.map(item => {
+                        if(this.myenv == "win"){
+                            imgname = item.substring(item.lastIndexOf("/")+1,item.length).split('.')[0]
+                            imgurl = require('../../../results/results/'+'65etr-dwdhuyx.png')
+                        }else{
+                            imgname = item.substring(item.lastIndexOf("\\")+1,item.length).split('.')[0]
+                            imgurl = require('..\\..\\..\\results\\results\\'+item)
+                        }
                         return {
                             img_name: imgname,
                             url: imgurl,
@@ -154,9 +168,10 @@ export default {
                    })
                    console.log(this.collectedList);
                 }
-            }).catch(() => {
-                this.$message.error('获取图片收藏列表失败');
             })
+            // .catch(() => {
+            //     this.$message.error('获取收藏图片列表失败');
+            // })
         },
         checkedChange(val){
             this.checked = val

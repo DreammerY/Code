@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+Vue.prototype.myenv = "win"
 Vue.use(VueAxios,axios)
 
 import ElementUI from 'element-ui';
