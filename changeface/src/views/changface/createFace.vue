@@ -89,7 +89,7 @@ export default {
             this.axios.post("/test/api/v1/index",params).then((res) => {
                 if(res && res.data){
                     this.fullscreenLoading = false
-                //    this.getImgList2()
+                    this.getImgList2()
                 }
             }).catch(() => {
                 this.fullscreenLoading = false
@@ -104,11 +104,11 @@ export default {
                     this.imgList =  res.data.select_image_list.map(item => {
                         if(this.myenv == "win"){
                             imgname = item.substring(item.lastIndexOf("/")+1,item.length).split('.')[0]
-                            imgurl = require('../../../results/'+item)
+                            imgurl = this.myip+'results/'+item
                            
                         } else{
                             imgname = item.substring(item.lastIndexOf("\\")+1,item.length).split('.')[0]
-                            imgurl = require('..\\..\\..\\results\\'+item)
+                            imgurl = this.myip+'results\\'+item
                         }
                         return {
                             img_name: imgname,
@@ -127,6 +127,7 @@ export default {
         paginationVue,
     },
     mounted(){
+        console.log(window.location.href);
         this.getModelList()
     }
 }

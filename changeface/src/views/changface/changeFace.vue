@@ -84,21 +84,6 @@ export default {
         uploadImgs(){
             document.getElementById('upload').click();
         },
-        // handleChange(file){
-        //     console.log(file);
-        // },
-        // handleSuccess(response, file){
-        //     if(response.code == 0){
-        //         var newLoadImgs = {
-        //             url: file.url,
-        //             img_name: file.name
-        //         }
-        //         this.collectedList = [newLoadImgs,...this.collectedList]
-        //     }
-        // },
-        // hangleError(){
-        //     this.$message("图片上传失败")
-        // },
         // 生成图片
         generateImgs(){
             if(this.uploadList.length == 0 || !this.checked){
@@ -128,12 +113,12 @@ export default {
                         if(this.myenv == "win"){
                              return {
                                 img_name: item,
-                                url: require('../../../workspace/data_dst/results/' + item)
+                                url: this.myip+'workspace/data_dst/results/'+item
                             }
                         }else{
                             return {
                                 img_name: item,
-                                url: require('..\\..\\..\\workspace\\data_dst\\results\\' + item)
+                                url: this.myip+'workspace\\data_dst\\results\\'+item
                             }
                         }
                         
@@ -155,10 +140,10 @@ export default {
                     this.collectedList = res.data.pkl_list.map(item => {
                         if(this.myenv == "win"){
                             imgname = item.substring(item.lastIndexOf("/")+1,item.length).split('.')[0]
-                            imgurl = require('../../../results/results/'+item)
+                            imgurl = this.myip +'results/results/'+item
                         }else{
                             imgname = item.substring(item.lastIndexOf("\\")+1,item.length).split('.')[0]
-                            imgurl = require('..\\..\\..\\results\\results\\'+item)
+                            imgurl = this.myip +'results\\results\\'+item
                         }
                         return {
                             img_name: imgname,
@@ -169,9 +154,9 @@ export default {
                    console.log(this.collectedList);
                 }
             })
-            // .catch(() => {
-            //     this.$message.error('获取收藏图片列表失败');
-            // })
+            .catch(() => {
+                this.$message.error('获取收藏图片列表失败');
+            })
         },
         checkedChange(val){
             this.checked = val

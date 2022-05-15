@@ -30,10 +30,10 @@ export default {
                     this.collectedList = res.data.pkl_list.map(item => {
                         if(this.myenv == "win"){
                             imgname = item.substring(item.lastIndexOf("/")+1,item.length).split('.')[0]
-                            imgurl = require('../../../results/results/'+item)
+                            imgurl = this.myip+'results/results/'+item
                         }else{
                             imgname = item.substring(item.lastIndexOf("\\")+1,item.length).split('.')[0]
-                            imgurl = require('..\\..\\..\\results\\results\\'+item)
+                            imgurl = this.myip+'results\\results\\'+item
                         }
                         return {
                             img_name: imgname,
