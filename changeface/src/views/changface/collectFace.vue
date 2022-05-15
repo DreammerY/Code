@@ -7,7 +7,7 @@
             <el-button type="primary" class="cancel_collect">取消收藏</el-button>
         </div>
         <imgListVue :imgList="collectedList" :havecheckbox="true"></imgListVue>
-        <paginationVue></paginationVue>
+        <paginationVue ref="pagination"></paginationVue>
     </div>
 </template>
 <script>
@@ -16,7 +16,9 @@ import imgListVue from '../../components/imgList.vue'
 export default {
     data(){
         return {
-            collectedList:[]
+            collectedList:[],
+            pageSize:0,
+            currentPage:0,
         }
     },
     methods:{
@@ -30,7 +32,8 @@ export default {
                         var imgurl = require('../../../results/results/'+'65etr-dwdhuyx.png')
                         return {
                             img_name: imgname,
-                            url: imgurl
+                            url: imgurl,
+                            url2:item
                         }
                    })
                    console.log(this.collectedList);
@@ -42,6 +45,11 @@ export default {
     },
     mounted(){
         this.getCollectedImgs()
+    },
+    watch:{
+        pageSize(val){
+            console.log(val);
+        }
     },
     components:{
         imgListVue,

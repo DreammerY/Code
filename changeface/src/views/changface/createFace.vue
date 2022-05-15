@@ -83,8 +83,8 @@ export default {
             this.fullscreenLoading = true
             var params = {
                 pkl:this.value,
-                start:this.input1,
-                end:this.input2
+                seeds_start:this.input1,
+                seeds_end:this.input2
             }
             this.axios.post("/test/api/v1/index",params).then((res) => {
                 if(res && res.data){

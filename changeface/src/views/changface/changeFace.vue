@@ -17,7 +17,7 @@
                     <input type="file" value="上传图片" multiple @change="selfhandleChange" id="upload">
                     <el-button @click="uploadImgs">上传图片</el-button>
                 </div>
-                <imgListVue :imgList="collectedList"></imgListVue>
+                <imgListVue :imgList="uploadList"></imgListVue>
                 <paginationVue></paginationVue>
             </div>
             <div class="top_right">
@@ -26,7 +26,7 @@
                     <el-button>多图下载</el-button>
                     <el-button>打包下载</el-button>
                 </div>
-                <imgListVue :imgList="generateList"></imgListVue>
+                <imgListVue :imgList="generateList" ref="generateList"></imgListVue>
                 <paginationVue></paginationVue>
             </div>
         </div>
@@ -36,7 +36,7 @@
                     收藏脸选择
                 </div>
                 <div class="">
-                    <imgListVue :havecheckbox="true"></imgListVue>
+                    <imgListVue :havecheckbox="true" :imgList="collectedList" @checkedChange="checkedChange"></imgListVue>
                     <paginationVue></paginationVue>
                 </div>
             </div>
@@ -49,10 +49,12 @@ import paginationVue from '@/components/pagination.vue'
 export default {
     data(){
         return {
+           uploadList: [],
            collectedList: [],
            generateList: [],
            fullscreenLoading: false,
            clickUpload:false,
+           checked:false,
         }
     },
     methods:{
@@ -74,7 +76,7 @@ export default {
                         img_name: item.name
                     }
                 })
-                this.collectedList = [...newLoadImgs,...this.collectedList]
+                this.uploadList = newLoadImgs
             }).catch(() => {
                 this.$message("图片上传失败")
             })
@@ -99,6 +101,13 @@ export default {
         // },
         // 生成图片
         generateImgs(){
+            if(this.uploadList.length == 0 || !this.checked){
+                this.$message({
+                    type:"warning",
+                    message:"请先上传图片并选择收藏照片",
+                })
+                return
+            }
             this.axios.post("/test/api/v1/dfl",{submit_cut_photo:true}).then((res) => {
                 if(res && res.data.code==0){
                     this.queryFaceResult()
@@ -116,18 +125,16 @@ export default {
                     console.log(res);
                     this.fullscreenLoading = false
                     this.generateList = res.data.select_image_list.map(item => {
-                        // var imgname = item.substring(item.lastIndexOf("/")+1,item.length).split('.')[0]
-                        var url = '../../../' + res.data.results_path + '/' + item
-                        console.log(url);
 
-                        var imgurl = require('../../../workspace/data_dst/results/seed0006.png')
                         return {
                             img_name: item,
-                            url: imgurl
+                            url: require('../../../workspace/data_dst/results/' + item)
                         }
                    })
+                   console.log(this.generateList );
                 }
-            }).catch(() => {
+            })
+            .catch(() => {
                 this.fullscreenLoading = false
                 this.$message.error('查询人脸结果失败');
             })
@@ -141,7 +148,8 @@ export default {
                         var imgurl = require('../../../results/results/'+'65etr-dwdhuyx.png')
                         return {
                             img_name: imgname,
-                            url: imgurl
+                            url: imgurl,
+                            url2: item,
                         }
                    })
                    console.log(this.collectedList);
@@ -149,6 +157,9 @@ export default {
             }).catch(() => {
                 this.$message.error('获取图片收藏列表失败');
             })
+        },
+        checkedChange(val){
+            this.checked = val
         }
     },
     created(){
