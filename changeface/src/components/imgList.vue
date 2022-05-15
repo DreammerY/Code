@@ -34,18 +34,18 @@ export default {
         imgList:{
             default:() => {
                 return [
-                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
-                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
-                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
-                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
-                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
-                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
-                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
-                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
-                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
-                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
-                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
-                    {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
+                    // {img_name:"123",url: require('../../results/00063-generate-images/seed0005.png'),url2:""},
                 ]
             },
         }

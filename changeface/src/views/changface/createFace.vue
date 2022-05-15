@@ -89,7 +89,7 @@ export default {
             this.axios.post("/test/api/v1/index",params).then((res) => {
                 if(res && res.data){
                     this.fullscreenLoading = false
-                   this.getImgList2()
+                //    this.getImgList2()
                 }
             }).catch(() => {
                 this.fullscreenLoading = false
