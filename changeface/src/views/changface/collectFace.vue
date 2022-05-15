@@ -17,8 +17,7 @@ export default {
     data(){
         return {
             collectedList:[],
-            pageSize:0,
-            currentPage:0,
+            total:0,
         }
     },
     methods:{
@@ -51,11 +50,6 @@ export default {
     },
     mounted(){
         this.getCollectedImgs()
-    },
-    watch:{
-        pageSize(val){
-            console.log(val);
-        }
     },
     components:{
         imgListVue,
