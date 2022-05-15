@@ -5,6 +5,10 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path:'/',
+    redirect:'/createface',
+  },
+  {
     path: '/createface',
     name: 'createface',
     component: function () {
