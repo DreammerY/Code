@@ -67,28 +67,28 @@
                 label="图片"
                 >
                     <template slot-scope="scope">
-                        <img :src="scope.row.imgurl" style="height:150px" />
+                        <img :src="myip+scope.row.background_path" style="height:150px" />
                     </template>
                 </el-table-column>
                 <el-table-column
                 label="人机距离"
                 >
                     <template slot-scope="scope">
-                        <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                        <span style="margin-left: 10px">{{ scope.row.rj_dist }}</span>
                     </template>
                 </el-table-column>
                                 <el-table-column
                 label="镜头高度"
                 >
                     <template slot-scope="scope">
-                        <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                        <span style="margin-left: 10px">{{ scope.row.jt_height }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
                 label="竖直角度"
                 >
                     <template slot-scope="scope">
-                        <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                        <span style="margin-left: 10px">{{ scope.row.v_angle }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作">
@@ -104,9 +104,16 @@
                 </el-table-column>
             </el-table>
         </div>
+        <el-dialog
+            title="提示"
+            :visible.sync="dialogVisible"
+            width="80%">
+            <addbackgroundVue  :inputList="inputList" :ifEdit="true"></addbackgroundVue>
+        </el-dialog>
     </div>
 </template>
 <script>
+import addbackgroundVue from './addbackground.vue';
 export default {
     data(){
         return {
@@ -114,46 +121,86 @@ export default {
             input_distance: "",
             input_start1: "",
             input_start2: "",
-            tableData: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄',
-                imgurl:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-                }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-                }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-            }]
+            dialogVisible: false,
+            inputList: [],
+            tableData: [
+                {
+                    date: '2016-05-02',
+                    name: '王小虎',
+                    imgurl:"http://47.97.25.111:8088/upload/back/1651114887(1)_e7ed3ebc.jpg",
+                    distance:'qw',
+                    height: 'qw',
+                    angle: 'qw',
+                }, 
+                {
+                    date: '2016-05-02',
+                    name: '王小虎',
+                    imgurl:"http://47.97.25.111:8088/upload/back/424a53b3-f0ab-4d98-a738-4909f74026e7_c46425fa.jpg",
+                    distance:'qw',
+                    height: 'qw',
+                    angle: 'qw',
+                }, 
+                {
+                    date: '2016-05-02',
+                    name: '王小虎',
+                    imgurl:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+                    distance:'qw',
+                    height: 'qw',
+                    angle: 'qw',
+                }, 
+            ]
         }
     },
     methods: {
         handleEdit(index, row) {
-            console.log(index, row);
+            this.inputList = row
+            this.dialogVisible = true
+            console.log(index,row);
         },
         handleDelete(index, row) {
             console.log(index, row);
+            this.$confirm('删除改条数据, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.tableData.splice(index,1)
+                    this.deleteRow(row)
+                }).catch(() => {
+                    this.$message({
+                    type: 'info',                
+                    message: '已取消'
+                });
+            });
+        },
+        // 删除数据
+        deleteRow(row){
+            this.axios.delete('/test/api/v2/manage',{ 'id': row.id }).then((res) => {
+                console.log(res);
+            })
+            .catch(()=>{
+                this.$message.error("删除失败");
+            })
         },
         // 获取表格内容   
         getTableData(){
             this.axios.get('/test/api/v2/manage').then((res) => {
                 if(res && res.data){
                     console.log(res);
+                    this.tableData = res.data.data.data
+                    console.log(this.tableData);
                 }
-            }).catch(() => {
+            })
+            .catch(() => {
                 this.$message.error("背景列表内容获取失败")
             })
         },
     },
     mounted(){
         this.getTableData()
+    },
+    components:{
+        addbackgroundVue,
     }
 }
 </script>

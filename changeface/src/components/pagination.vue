@@ -16,7 +16,7 @@
 export default {
     props:{
         total:{
-            default:100
+            default:0
         },    
     },
     data(){

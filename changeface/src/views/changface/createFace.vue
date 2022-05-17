@@ -32,7 +32,7 @@
         </div>
         <!-- <img  :src="require('../../../results/00063-generate-images/seed0005.png')" alt=""> -->
         <imgListVue :imgList="imgList" :havecheckbox="true" :collection="true"></imgListVue>
-        <paginationVue></paginationVue>
+        <paginationVue :total="imgList.length"></paginationVue>
     </div>
 </template>
 <script>

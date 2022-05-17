@@ -18,7 +18,7 @@
                     <el-button @click="uploadImgs">上传图片</el-button>
                 </div>
                 <imgListVue :imgList="uploadList"></imgListVue>
-                <paginationVue></paginationVue>
+                <paginationVue :total="uploadList.length"></paginationVue>
             </div>
             <div class="top_right">
                  <div class="top_right_btn">
@@ -27,7 +27,7 @@
                     <el-button @click="packDownload">打包下载</el-button>
                 </div>
                 <imgListVue :imgList="generateList" ref="generateList"></imgListVue>
-                <paginationVue></paginationVue>
+                <paginationVue :total="generateList.length"></paginationVue>
             </div>
         </div>
         <div class="bottom">
@@ -37,7 +37,7 @@
                 </div>
                 <div class="">
                     <imgListVue :havecheckbox="true" :imgList="showImgList" @checkedChange="checkedChange"></imgListVue>
-                    <paginationVue  @currentPageChange="collectPageChange" @pageSizeChange="collectPageSize" :total="total"></paginationVue>
+                    <paginationVue  @currentPageChange="collectPageChange" @pageSizeChange="collectPageSize" :total="totalBottom"></paginationVue>
                 </div>
             </div>
         </div>
@@ -57,7 +57,7 @@ export default {
             checked:false,
             currentPage:1, // 第一次默认页数页码 需与分页一致
             pageSize:10,
-            total:0,
+            totalBottom:0,
         }
     },
     methods:{
@@ -156,7 +156,7 @@ export default {
                             url2: item,
                         }
                    })
-                   this.total = this.collectedList.length
+                   this.totalBottom = this.collectedList.length
                 }
             })
             .catch(() => {
@@ -206,7 +206,7 @@ export default {
     },
     computed:{
         showImgList(){
-            if(this.total <= this.pageSize){
+            if(this.totalBottom <= this.pageSize){
                 return this.collectedList
             }else{ // 分页
                 return this.collectedList.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)

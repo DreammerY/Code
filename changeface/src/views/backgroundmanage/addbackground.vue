@@ -13,7 +13,7 @@
                     </el-upload>
                 </div>
                 <div class="showImg">
-                    <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="" ref="leftImg">
+                    <img src="" alt="" ref="leftImg">
                 </div>
             </div>
             <div class="top_right">
@@ -28,8 +28,8 @@
                     </el-upload>
                 </div>
                 <div class="showImg" id="showImg">
-                    <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="" ref="rightImg">
-                    <div class="redReact" id="redReact"></div>
+                    <img src="" alt="" ref="rightImg" ondragstart="return false;">
+                    <div class="redReact" id="redReact" v-show="rightImg"></div>
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
                     <div class="grid-content bg-purple">
                         <span class="col_text">名称 </span>
                         <el-input
-                            v-model="row1_1" clearable style="width:100px" class="input_input">
+                            v-model="name" clearable style="width:100px" class="input_input">
                         </el-input>
                     </div>
                 </el-col>
@@ -47,7 +47,7 @@
                     <div class="grid-content bg-purple">
                         <span class="col_text">镜头高度 </span>
                         <el-input
-                            v-model="row1_2" clearable style="width:100px" class="input_input">
+                            v-model="jt_height" clearable style="width:100px" class="input_input">
                         </el-input>
                     </div>
                 </el-col>
@@ -55,7 +55,7 @@
                     <div class="grid-content bg-purple">
                         <span class="col_text">人物大小：H </span>
                         <el-input
-                            v-model="row1_3" clearable style="width:100px" class="input_input">
+                            v-model="person_h" clearable style="width:100px" class="input_input">
                         </el-input>
                     </div>
                 </el-col>
@@ -65,7 +65,7 @@
                     <div class="grid-content bg-purple">
                         <span class="col_text">人机距离 </span>
                         <el-input
-                            v-model="row2_1" clearable style="width:100px" class="input_input">
+                            v-model="rj_dist" clearable style="width:100px" class="input_input">
                         </el-input>
                     </div>
                 </el-col>
@@ -73,7 +73,7 @@
                     <div class="grid-content bg-purple">
                         <span class="col_text">竖直角度 </span>
                         <el-input
-                            v-model="row2_2" clearable style="width:100px" class="input_input">
+                            v-model="v_angle" clearable style="width:100px" class="input_input">
                         </el-input>
                     </div>
                 </el-col>
@@ -81,7 +81,7 @@
                     <div class="grid-content bg-purple">
                         <span class="col_text">人物坐标：X </span>
                         <el-input
-                            v-model="row2_3" clearable style="width:100px" class="input_input">
+                            v-model="person_x" clearable style="width:100px" class="input_input">
                         </el-input>
                     </div>
                 </el-col>
@@ -89,7 +89,7 @@
                     <div class="grid-content bg-purple">
                         <span class="col_text">Y</span>
                         <el-input
-                            v-model="row2_4" clearable style="width:100px" class="input_input">
+                            v-model="person_y" clearable style="width:100px" class="input_input">
                         </el-input>
                     </div>
                 </el-col>
@@ -99,7 +99,7 @@
                     <div class="grid-content bg-purple">
                         <span class="col_text">SEC </span>
                         <el-input
-                            v-model="row3_1" clearable style="width:100px" class="input_input">
+                            v-model="sec" clearable style="width:100px" class="input_input">
                         </el-input>
                     </div>
                 </el-col>
@@ -107,7 +107,7 @@
                     <div class="grid-content bg-purple">
                         <span class="col_text">水平角度 </span>
                         <el-input
-                            v-model="row3_2" clearable style="width:100px" class="input_input">
+                            v-model="w_angle" clearable style="width:100px" class="input_input">
                         </el-input>
                     </div>
                 </el-col>
@@ -115,12 +115,13 @@
                     <div class="grid-content bg-purple">
                         <span class="col_text">人物身高</span>
                         <el-input
-                            v-model="row3_3" clearable style="width:100px" class="input_input">
+                            v-model="person_height" clearable style="width:100px" class="input_input">
                         </el-input>
                     </div>
                 </el-col>
                 <el-col :span="6" style="text-align:center">
-                    <el-button type="primary" @click="submit">提交</el-button>
+                    <el-button type="primary" @click="edit" v-if="ifEdit">修改</el-button>
+                    <el-button type="primary" @click="submit" v-if="!ifEdit">提交</el-button>
                 </el-col>
             </el-row>
             <el-row :gutter="20">
@@ -128,7 +129,7 @@
                     <div class="grid-content bg-purple">
                         <span class="col_text">ISO </span>
                         <el-input
-                            v-model="row4_1" clearable style="width:100px" class="input_input">
+                            v-model="iso" clearable style="width:100px" class="input_input">
                         </el-input>
                     </div>
                 </el-col>
@@ -136,7 +137,7 @@
                     <div class="grid-content bg-purple">
                         <span class="col_text">F </span>
                         <el-input
-                            v-model="row4_2" clearable style="width:100px" class="input_input">
+                            v-model="f" clearable style="width:100px" class="input_input">
                         </el-input>
                     </div>
                 </el-col>
@@ -146,20 +147,28 @@
 </template>
 <script>
 export default {
+    props:{
+        ifEdit:{
+            default:false
+        },
+        inputList:{
+            default:""
+        }
+    },
     data(){
         return {
-            row1_1: "",
-            row1_2: "",
-            row1_3: "", // h
-            row2_1: "",
-            row2_2: "",
-            row2_3: "", // x
-            row2_4: "", // y
-            row3_1: "",
-            row3_2: "",
-            row3_3: "",
-            row4_1: "",
-            row4_2: "",
+            name: "",
+            jt_height: "",
+            person_h: "", // 像素高
+            rj_dist: "",
+            v_angle: "",
+            person_x: "",
+            person_y: "",
+            sec: "",
+            w_angle: "",
+            person_height: "",
+            iso: "",
+            f: "",
             leftImg: "",
             rightImg: "",
             imgWidth:'', // 图片原始宽高
@@ -187,6 +196,8 @@ export default {
                     this.imgHeight= image.height
                 }
             }
+            this.addMove()
+            this.setReactEvent()
         },
         submit(){
             // if(
@@ -204,22 +215,51 @@ export default {
             console.log(this.leftImg.raw,this.rightImg.raw);
             this.addNewBackground(formData)
         },
-        // 新增背景
-        addNewBackground(formData ){
+        // 编辑修改接口
+        edit(){
+            var formData  = new FormData();
+            formData.append('file', this.leftImg.raw);
+            formData.append('file', this.rightImg.raw);
             var param = {
-                file: formData ,
-                name: this.row1_1, // 名称
-                rj_dist: this.row2_1, // 人际距离
-                jt_height: this.row1_2, // 镜头高度
-                v_angle: this.row2_2, // 竖直角度 
-                w_angle: this.row3_2, // 水平角度
-                f: this.row4_2, // 名称
-                sec: this.row3_1, // 名称
-                iso: this.row4_1, // 名称
-                person_height: this.row3_3, // 人物身高
-                person_x: this.row2_3, // 人物左边X
-                person_y: this.row2_4, // 人物左边Y
-                person_h: this.row1_3, // 人物大小
+                type: "all", // background_path  refer_path all
+                id: this.inputList.id,
+                // file: formData,
+                name: this.name, // 名称
+                rj_dist: this.rj_dist, // 人际距离
+                jt_height: this.jt_height, // 镜头高度
+                v_angle: this.v_angle, // 竖直角度 
+                w_angle: this.w_angle, // 水平角度
+                f: this.f, // 名称
+                sec: this.sec, // 名称
+                iso: this.iso, // 名称
+                person_height: this.person_height, // 人物身高
+                person_x: this.person_x, // 人物左边X
+                person_y: this.person_y, // 人物左边Y
+                person_h: this.person_h, // 人物大小
+            }
+            this.axios.put('/test/api/v2/manage',param).then((res) => {
+                console.log(res);
+            })
+            .catch(()=>{
+                this.$message.error("编辑失败");
+            })
+        },
+        // 新增背景
+        addNewBackground(formData){
+            var param = {
+                file: formData,
+                name: this.name, // 名称
+                rj_dist: this.rj_dist, // 人际距离
+                jt_height: this.jt_height, // 镜头高度
+                v_angle: this.v_angle, // 竖直角度 
+                w_angle: this.w_angle, // 水平角度
+                f: this.f, // 名称
+                sec: this.sec, // 名称
+                iso: this.iso, // 名称
+                person_height: this.person_height, // 人物身高
+                person_x: this.person_x, // 人物左边X
+                person_y: this.person_y, // 人物左边Y
+                person_h: this.person_h, // 人物大小
             }
             console.log(param.file.get('file'));
             this.axios.post('/test/api/v2/manage',param).then((res) => {
@@ -233,8 +273,9 @@ export default {
         // 添加移动
         addMove(){
             var box = document.getElementById("redReact");
+            var container = document.getElementById("showImg");
             const that = this
-            document.oncontextmenu = (e) => {
+            container.oncontextmenu = (e) => {
                 e.preventDefault()
             }
             box.onmousedown = function(event){
@@ -242,24 +283,24 @@ export default {
                 var dx = event.clientX - box.offsetLeft; // offsetLeft为触发物left
                 var dy = event.clientY - box.offsetTop;
 
-                document.onmousemove = function(event){
-                    if(box.offsetLeft<0 || box.offsetTop<0){
-                        box.style.left = 0  +"px";
-                        box.style.top = 0 +"px";
-                        that.$message.info("不能超出图片外部")
-                        document.onmousemove = null;
-                        document.onmouseup = null;
-                        return
-                    }
+                container.onmousemove = function(event){
+                    // if(box.offsetLeft<0 || box.offsetTop<0){
+                    //     box.style.left = 0  +"px";
+                    //     box.style.top = 0 +"px";
+                    //     that.$message.info("不能超出图片外部")
+                    //     document.onmousemove = null;
+                    //     document.onmouseup = null;
+                    //     return
+                    // }
                     event = event || window.event;
                     var left = event.clientX; // 鼠标移动相对于浏览器的坐标
                     var top = event.clientY;
                     box.style.left = left - dx  +"px";  // 鼠标偏移量
                     box.style.top = top - dy +"px";
 
-                    document.onmouseup = function(){
-                        document.onmousemove = null;
-                        document.onmouseup = null;
+                    container.onmouseup = function(){
+                        container.onmousemove = null;
+                        container.onmouseup = null;
                     };
                 };
             };
@@ -364,8 +405,22 @@ export default {
         },
     },
     mounted(){
-        this.addMove()
-        this.setReactEvent()
+        if(this.inputList == "" || !this.inputList){
+            return
+        }
+        this.$refs.leftImg.src = this.myip+this.inputList.background_path
+        this.name = this.inputList.name
+        this.jt_height = this.inputList.jt_height
+        this.person_h = this.inputList.person_h // 像素高 // 像素高
+        this.rj_dist = this.inputList.rj_dist
+        this.v_angle = this.inputList.v_angle
+        this.person_x = this.inputList.person_x
+        this.person_y = this.inputList.person_y
+        this.sec = this.inputList.sec
+        this.w_angle = this.inputList. w_angle
+        this.person_height = this.inputList.person_height
+        this.iso = this.inputList.iso
+        this.f = this.inputList.f
     }
 }
 </script>
@@ -375,23 +430,26 @@ export default {
 }
 .addbackground .top{
     display: flex;
-
 }
 .addbackground .top .top_left,.top_right{
-   flex: 1;
+    flex: 1;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    padding-top: 10px;
 }
 .addbackground .top .top_left,.top_right{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    margin-right: 10px
+    margin-right: 10px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 .addbackground .top  .showImg{
     /* width: 80%; */
     height: 300px;
     margin-top: 20px;
     position: relative;
+
 }
 .addbackground .top  .showImg .redReact{
     box-sizing: border-box;
@@ -404,8 +462,9 @@ export default {
     left: 0;
 }
 .addbackground .top  .showImg img{
-    /* width: 100%; */
+    max-width: 100%;
     height: 100%;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 /*  */
 .addbackground .bottom{
