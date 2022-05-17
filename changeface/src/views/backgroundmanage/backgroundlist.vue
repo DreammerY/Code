@@ -46,10 +46,10 @@
         <div class="bottom">
             <el-table
                 :data="tableData"
-                border
-                style="width: 100%">
+                border>
                 <el-table-column
                 label="日期"
+                width="120"
                 >
                     <template slot-scope="scope">
                         <i class="el-icon-time"></i>
@@ -58,7 +58,7 @@
                 </el-table-column>
                 <el-table-column
                 label="名称"
-                width="180">
+                width="120">
                     <template slot-scope="scope">
                         {{ scope.row.name }}
                     </template>
@@ -67,7 +67,7 @@
                 label="图片"
                 >
                     <template slot-scope="scope">
-                        <img :src="scope.row.imgurl" style="height:100px" />
+                        <img :src="scope.row.imgurl" style="height:150px" />
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -114,7 +114,7 @@ export default {
             input_distance: "",
             input_start1: "",
             input_start2: "",
-             tableData: [{
+            tableData: [{
                 date: '2016-05-02',
                 name: '王小虎',
                 address: '上海市普陀区金沙江路 1518 弄',
@@ -135,12 +135,25 @@ export default {
         }
     },
     methods: {
-      handleEdit(index, row) {
-        console.log(index, row);
-      },
-      handleDelete(index, row) {
-        console.log(index, row);
-      }
+        handleEdit(index, row) {
+            console.log(index, row);
+        },
+        handleDelete(index, row) {
+            console.log(index, row);
+        },
+        // 获取表格内容   
+        getTableData(){
+            this.axios.get('/test/api/v2/manage').then((res) => {
+                if(res && res.data){
+                    console.log(res);
+                }
+            }).catch(() => {
+                this.$message.error("背景列表内容获取失败")
+            })
+        },
+    },
+    mounted(){
+        this.getTableData()
     }
 }
 </script>

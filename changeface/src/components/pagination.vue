@@ -3,11 +3,11 @@
          <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage"
+                :current-page="1"
                 layout="total, prev, pager, next,sizes"
-                :page-sizes="[1,2,3,4,5]"
+                :page-sizes="[5,10,15,20,30]"
                 :pager-count="5"
-                :page-size="pageSize"
+                :page-size="10"
                 :total="total">
         </el-pagination>
     </div>
@@ -16,22 +16,22 @@
 export default {
     props:{
         total:{
-            default:20
+            default:100
         },    
     },
     data(){
         return {
-            currentPage:1,
-            pageSize:10,
+            // currentPage:1,
+            // pageSize:10,
         }
     },
     methods:{
         handleSizeChange(val) {
-            this.pageSize = val
+            this.$emit("pageSizeChange",val)
             console.log(`每页 ${val} 条`);
         },
         handleCurrentChange(val) {
-           this.currentPage = val
+        this.$emit("currentPageChange",val)
             console.log(`当前页: ${val}`);
         }
     },

@@ -6,8 +6,8 @@
             </div>
             <el-button type="primary" class="cancel_collect">取消收藏</el-button>
         </div>
-        <imgListVue :imgList="collectedList" :havecheckbox="true"></imgListVue>
-        <paginationVue ref="pagination"></paginationVue>
+        <imgListVue :imgList="showImgList" :havecheckbox="true"></imgListVue>
+        <paginationVue @currentPageChange="collectPageChange" @pageSizeChange="collectPageSize" :total="total"></paginationVue>
     </div>
 </template>
 <script>
@@ -17,6 +17,8 @@ export default {
     data(){
         return {
             collectedList:[],
+            currentPage:1, // 第一次默认页数页码 需与分页一致
+            pageSize:10,
             total:0,
         }
     },
@@ -41,11 +43,29 @@ export default {
                             url2:item
                         }
                    })
-                   console.log(this.collectedList);
+                   this.total = this.collectedList.length
+                //    this.currentPage = 1
+                //    this.pageSize = 10
                 }
-            }).catch(() => {
+            })
+            .catch(() => {
                 this.$message.error('获取图片收藏列表失败');
             })
+        },
+        collectPageChange(newVal){
+            this.currentPage = newVal
+        },
+        collectPageSize(newVal){
+            this.pageSize = newVal
+        },
+    },
+    computed:{
+        showImgList(){
+            if(this.total <= this.pageSize){
+                return this.collectedList
+            }else{ // 分页
+                return this.collectedList.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)
+            }
         }
     },
     mounted(){

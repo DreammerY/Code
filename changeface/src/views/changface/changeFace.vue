@@ -24,7 +24,7 @@
                  <div class="top_right_btn">
                     <el-button @click="generateImgs">开始生成</el-button>
                     <el-button>多图下载</el-button>
-                    <el-button>打包下载</el-button>
+                    <el-button @click="packDownload">打包下载</el-button>
                 </div>
                 <imgListVue :imgList="generateList" ref="generateList"></imgListVue>
                 <paginationVue></paginationVue>
@@ -36,8 +36,8 @@
                     收藏脸选择
                 </div>
                 <div class="">
-                    <imgListVue :havecheckbox="true" :imgList="collectedList" @checkedChange="checkedChange"></imgListVue>
-                    <paginationVue></paginationVue>
+                    <imgListVue :havecheckbox="true" :imgList="showImgList" @checkedChange="checkedChange"></imgListVue>
+                    <paginationVue  @currentPageChange="collectPageChange" @pageSizeChange="collectPageSize" :total="total"></paginationVue>
                 </div>
             </div>
         </div>
@@ -49,12 +49,15 @@ import paginationVue from '@/components/pagination.vue'
 export default {
     data(){
         return {
-           uploadList: [],
-           collectedList: [],
-           generateList: [],
-           fullscreenLoading: false,
-           clickUpload:false,
-           checked:false,
+            uploadList: [],  // 上传图片列表
+            collectedList: [], // 收藏图片列表
+            generateList: [], // 生成图片列表
+            fullscreenLoading: false,
+            clickUpload:false,
+            checked:false,
+            currentPage:1, // 第一次默认页数页码 需与分页一致
+            pageSize:10,
+            total:0,
         }
     },
     methods:{
@@ -63,11 +66,13 @@ export default {
                 return;
             }
             let files = e.target.files
+            console.log(files);
             let formdata = new FormData()
             Array.from(e.target.files).map(item => {
                 formdata.append("file", item)  //将每一个文件图片都加进formdata
                 // formdata.append('name',"sbdoubao")
             })
+            console.log(formdata.get('file'));
             this.axios.post("/test/api/v1/dfl", formdata)
             .then(() => { 
                var newLoadImgs = Array.from(files).map(item => {
@@ -93,7 +98,7 @@ export default {
                 })
                 return
             }
-            this.axios.post("/test/api/v1/dfl",{submit_cut_photo:true}).then((res) => {
+            this.axios.post("/test/api/v1/dfl",{submit_cut_photo:"True"}).then((res) => {
                 if(res && res.data.code==0){
                     this.queryFaceResult()
                 }
@@ -151,19 +156,62 @@ export default {
                             url2: item,
                         }
                    })
-                   console.log(this.collectedList);
+                   this.total = this.collectedList.length
                 }
             })
             .catch(() => {
                 this.$message.error('获取收藏图片列表失败');
             })
         },
+        // 打包下载失败
+        packDownload(){
+            if(this.generateList.length == 0){
+                this.$message.info("请先生成图片")
+                return
+            }
+            this.axios({
+                method: "get",
+                url:"/test/api/v1/result/face/download",
+                responseType:"blob",
+            }).then((res) => {
+                if(res){
+                    const content = res.data;
+                    const blob = new Blob([content], { type: "application/zip" });
+                    const fileName = "generateresult.zip";
+                    const elink = document.createElement("a");
+                    elink.download = fileName;
+                    elink.style.display = "none";
+                    elink.href = URL.createObjectURL(blob);
+                    document.body.appendChild(elink);
+                    elink.click();
+                    URL.revokeObjectURL(elink.href); // 释放URL 对象
+                    document.body.removeChild(elink);
+                }
+            }).catch(() => {
+                this.$message.error("打包下载失败")
+            })
+        },
         checkedChange(val){
             this.checked = val
-        }
+        },
+        collectPageChange(newVal){
+            this.currentPage = newVal
+        },
+        collectPageSize(newVal){
+            this.pageSize = newVal
+        },
     },
     created(){
         this.getCollectedImgs()
+    },
+    computed:{
+        showImgList(){
+            if(this.total <= this.pageSize){
+                return this.collectedList
+            }else{ // 分页
+                return this.collectedList.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)
+            }
+        }
     },
     components:{
         imgListVue,
