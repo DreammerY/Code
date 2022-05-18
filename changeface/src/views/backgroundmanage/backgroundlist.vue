@@ -108,7 +108,7 @@
             title="提示"
             :visible.sync="dialogVisible"
             width="80%">
-            <addbackgroundVue  :inputList="inputList" :ifEdit="true"></addbackgroundVue>
+            <addbackgroundVue  :inputList="inputList" :ifEdit="true" @closeDialog="closeDialog"></addbackgroundVue>
         </el-dialog>
     </div>
 </template>
@@ -170,6 +170,9 @@ export default {
                     message: '已取消'
                 });
             });
+        },
+        closeDialog(){
+            this.dialogVisible = false
         },
         // 删除数据
         deleteRow(id,index){

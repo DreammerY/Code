@@ -157,6 +157,9 @@ export default {
     },
     data(){
         return {
+            lchange:false,
+            rchange:false,
+            type:"",
             name: "",
             jt_height: "",
             person_h: 100, // 像素高 人物大小
@@ -229,26 +232,33 @@ export default {
         // 编辑修改接口
         edit(){
             var formData  = new FormData();
-            formData.append('file', this.leftImg.raw);
-            formData.append('file', this.rightImg.raw);
-            var param = {
-                type: "all", // background_path  refer_path all
-                id: this.inputList.id,
-                // file: formData,
-                name: this.name, // 名称
-                rj_dist: this.rj_dist, // 人际距离
-                jt_height: this.jt_height, // 镜头高度
-                v_angle: this.v_angle, // 竖直角度 
-                w_angle: this.w_angle, // 水平角度
-                f: this.f, // 名称
-                sec: this.sec, // 名称
-                iso: this.iso, // 名称
-                person_height: this.person_height, // 人物身高
-                person_x: this.person_x, // 人物左边X
-                person_y: this.person_y, // 人物左边Y
-                person_h: this.person_h, // 人物大小
+            if(this.lchange && this.rchange){
+                this.type = "all"
+                formData.append('file', this.leftImg.raw);
+                formData.append('file', this.rightImg.raw);
+            }else if(this.lchange && !this.rchange){
+                this.type = "background_path"
+                formData.append('file', this.leftImg.raw);
+            }else if(!this.lchange && this.rchange){
+                this.type = "refer_path"
+                formData.append('file', this.rightImg.raw);
             }
-            this.axios.put('/test/api/v2/manage',param).then((res) => {
+            console.log(this.type);
+            formData.append('id', this.inputList.id);
+            formData.append('name', this.name);
+            formData.append('rj_dist', this.rj_dist);
+            formData.append('jt_height', this.jt_height);
+            formData.append('v_angle', this.v_angle);
+            formData.append('w_angle', this.w_angle);
+            formData.append('f', this.f);
+            formData.append('sec', this.sec);
+            formData.append('iso', this.iso);
+            formData.append('person_height', this.person_height);
+            formData.append('person_x', this.person_x);
+            formData.append('person_y', this.person_y);
+            formData.append('person_h', this.person_h);
+            this.axios.put('/test/api/v2/manage',formData).then((res) => {
+                this.$emit("closeDialog")
                 console.log(res);
             })
             .catch(()=>{
@@ -423,8 +433,11 @@ export default {
         this.f = this.inputList.f
     },
     watch:{
-        leftImg(val){
-            console.log(val);
+        leftImg(){
+            this.lchange = true
+        },
+        rightImg(){
+            this.rchange = true
         }
     }
 }
