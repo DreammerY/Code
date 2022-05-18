@@ -159,11 +159,11 @@ export default {
         return {
             name: "",
             jt_height: "",
-            person_h: "", // 像素高 人物大小
+            person_h: 100, // 像素高 人物大小
             rj_dist: "",
             v_angle: "",
-            person_x: "",
-            person_y: "",
+            person_x: 25,
+            person_y: 50,
             sec: "",
             w_angle: "",
             person_height: "",
@@ -408,6 +408,7 @@ export default {
             return
         }
         this.$refs.leftImg.src = this.myip+this.inputList.background_path
+        this.$refs.rightImg.src = this.myip+this.inputList.refer_path
         this.name = this.inputList.name
         this.jt_height = this.inputList.jt_height
         this.person_h = this.inputList.person_h // 像素高 // 像素高
@@ -420,6 +421,11 @@ export default {
         this.person_height = this.inputList.person_height
         this.iso = this.inputList.iso
         this.f = this.inputList.f
+    },
+    watch:{
+        leftImg(val){
+            console.log(val);
+        }
     }
 }
 </script>

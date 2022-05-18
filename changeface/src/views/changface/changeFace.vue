@@ -99,7 +99,7 @@ export default {
                 })
                 return
             }
-            this.fullscreenLoading = false
+            this.fullscreenLoading = true
             this.axios.post("/test/api/v1/dfl",{submit_cut_photo:"True"}).then((res) => {
                 if(res && res.data.code==0){
                     this.fullscreenLoading = false
@@ -112,7 +112,6 @@ export default {
         },
         // 查询人脸结果
         queryFaceResult(){
-            this.fullscreenLoading = true
             this.axios.get("/test/api/v1/result/face").then((res) => {
                 if(res){
                     if(!res || !res.data) return
@@ -134,7 +133,6 @@ export default {
                 }
             })
             .catch(() => {
-                this.fullscreenLoading = false
                 this.$message.error('查询人脸结果失败');
             })
         },

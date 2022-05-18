@@ -67,7 +67,7 @@
                 label="图片"
                 >
                     <template slot-scope="scope">
-                        <img :src="myip+scope.row.background_path" style="height:150px" />
+                        <img :src="scope.row.background_path?myip+scope.row.background_path:''" style="height:150px" />
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -158,14 +158,12 @@ export default {
             console.log(index,row);
         },
         handleDelete(index, row) {
-            console.log(index, row);
             this.$confirm('删除改条数据, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.tableData.splice(index,1)
-                    this.deleteRow(row.id)
+                    this.deleteRow(row.id,index)
                 }).catch(() => {
                     this.$message({
                     type: 'info',                
@@ -174,15 +172,10 @@ export default {
             });
         },
         // 删除数据
-        deleteRow(row){
-            this.axios({
-                methods:"delete",
-                url: '/test/api/v2/manage',
-                headers:{"content-type": "application/json"},
-                params:{
-                     id: row.id 
-                }
-            }).then((res) => {
+        deleteRow(id,index){
+            this.axios.delete('/test/api/v2/manage',{data:{id: id }})
+            .then((res) => {
+                this.tableData.splice(index,1)
                 console.log(res);
             })
             .catch(()=>{
