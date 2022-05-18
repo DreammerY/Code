@@ -165,7 +165,7 @@ export default {
                     type: 'warning'
                 }).then(() => {
                     this.tableData.splice(index,1)
-                    this.deleteRow(row)
+                    this.deleteRow(row.id)
                 }).catch(() => {
                     this.$message({
                     type: 'info',                
