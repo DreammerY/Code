@@ -153,6 +153,9 @@ export default {
         },
         inputList:{
             default:""
+        },
+        add:{
+            default:false
         }
     },
     data(){
@@ -276,6 +279,11 @@ export default {
                 if(res && res.data){
                     console.log(res);
                     if(res.data.errcode == 0){
+                        console.log(this.add);
+                        if(this.add){
+                            this.$emit("closeAddDialog")
+                            this.$emit("getTableData")
+                        }
                         this.$message.success("新增成功")
                         // this.$router.go(0)
                     }
@@ -451,9 +459,6 @@ export default {
 }
 </script>
 <style scoped>
-.addbackground{
-
-}
 .addbackground .top{
     display: flex;
 }

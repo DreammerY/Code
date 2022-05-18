@@ -39,7 +39,7 @@
             </div>
             <div class="right">
                 <el-button>开始搜索</el-button>
-                <el-button>新增背景</el-button>
+                <el-button @click="addBackground">新增背景</el-button>
             </div>
         </div>
         <!--  -->
@@ -105,10 +105,16 @@
             </el-table>
         </div>
         <el-dialog
-            title="提示"
+            title="修改"
             :visible.sync="dialogVisible"
             width="80%">
             <addbackgroundVue  :inputList="inputList" :ifEdit="true" @closeDialog="closeDialog" @getTableData="getTableData"></addbackgroundVue>
+        </el-dialog>
+        <el-dialog
+            title="新增"
+            :visible.sync="dialogVisibleAdd"
+            width="80%">
+            <addbackgroundVue  @closeAddDialog="closeAddDialog" @getTableData="getTableData" :add="true"></addbackgroundVue>
         </el-dialog>
     </div>
 </template>
@@ -122,6 +128,7 @@ export default {
             input_start1: "",
             input_start2: "",
             dialogVisible: false,
+            dialogVisibleAdd:false,
             inputList: [],
             tableData: [
                 {
@@ -173,6 +180,12 @@ export default {
         },
         closeDialog(){
             this.dialogVisible = false
+        },
+        closeAddDialog(){
+             this.dialogVisibleAdd = false
+        },
+        addBackground(){
+            this.dialogVisibleAdd = true
         },
         // 删除数据
         deleteRow(id,index){
