@@ -159,7 +159,7 @@ export default {
         return {
             name: "",
             jt_height: "",
-            person_h: "", // 像素高
+            person_h: "", // 像素高 人物大小
             rj_dist: "",
             v_angle: "",
             person_x: "",
@@ -200,19 +200,30 @@ export default {
             this.setReactEvent()
         },
         submit(){
-            // if(
-            //     this.row1_1=="" || this.row1_2=="" || this.row1_3==""   ||
-            //     this.row2_1=="" || this.row2_2=="" || this.row2_3==""   || this.row2_4==""||
-            //     this.row3_1=="" || this.row3_2=="" || this.row3_3==""   ||
-            //     this.row4_1=="" || this.row4_2=="" || this.leftImg== "" || this.rightImg==""
-            // ){
-            //     this.$message.info("存在未填选项")
-            //     return
-            // }
+            if(
+                this.name=="" || this.rj_dist=="" || this.jt_height==""   ||
+                this.v_angle=="" || this.w_angle=="" || this.f==""   || this.sec==""||
+                this.iso=="" || this.person_height=="" || this.person_x==""   ||
+                this.person_y=="" || this.person_h=="" || this.leftImg== "" || this.rightImg==""
+            ){
+                this.$message.info("存在未填选项")
+                return
+            }
             var formData  = new FormData();
             formData.append('file', this.leftImg.raw);
             formData.append('file', this.rightImg.raw);
-            console.log(this.leftImg.raw,this.rightImg.raw);
+            formData.append('name', this.name);
+            formData.append('rj_dist', this.rj_dist);
+            formData.append('jt_height', this.jt_height);
+            formData.append('v_angle', this.v_angle);
+            formData.append('w_angle', this.w_angle);
+            formData.append('f', this.f);
+            formData.append('sec', this.sec);
+            formData.append('iso', this.iso);
+            formData.append('person_height', this.person_height);
+            formData.append('person_x', this.person_x);
+            formData.append('person_y', this.person_y);
+            formData.append('person_h', this.person_h);
             this.addNewBackground(formData)
         },
         // 编辑修改接口
@@ -246,25 +257,13 @@ export default {
         },
         // 新增背景
         addNewBackground(formData){
-            var param = {
-                file: formData,
-                name: this.name, // 名称
-                rj_dist: this.rj_dist, // 人际距离
-                jt_height: this.jt_height, // 镜头高度
-                v_angle: this.v_angle, // 竖直角度 
-                w_angle: this.w_angle, // 水平角度
-                f: this.f, // 名称
-                sec: this.sec, // 名称
-                iso: this.iso, // 名称
-                person_height: this.person_height, // 人物身高
-                person_x: this.person_x, // 人物左边X
-                person_y: this.person_y, // 人物左边Y
-                person_h: this.person_h, // 人物大小
-            }
-            console.log(param.file.get('file'));
-            this.axios.post('/test/api/v2/manage',param).then((res) => {
+            this.axios.post('/test/api/v2/manage',formData).then((res) => {
                 if(res && res.data){
                     console.log(res);
+                    if(res.data.errcode == 0){
+                        this.$message.success("新增成功")
+                        // this.$router.go(0)
+                    }
                 }
             }).catch(() => {
                 this.$message.error("新增背景失败")
@@ -381,9 +380,9 @@ export default {
             var w = parseInt(c.style.width)  || 50
             var l = c.offsetLeft
             var t = c.offsetTop
-            that.row2_3 = l + w/2
-            that.row2_4 = t + h/2
-            that.row1_3 = h
+            that.person_x = l + w/2
+            that.person_y = t + h/2
+            that.person_h = h
             }
             
             // 获取鼠标所在div的位置

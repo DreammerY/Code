@@ -175,7 +175,14 @@ export default {
         },
         // 删除数据
         deleteRow(row){
-            this.axios.delete('/test/api/v2/manage',{ 'id': row.id }).then((res) => {
+            this.axios({
+                methods:"delete",
+                url: '/test/api/v2/manage',
+                headers:{"content-type": "application/json"},
+                params:{
+                     id: row.id 
+                }
+            }).then((res) => {
                 console.log(res);
             })
             .catch(()=>{

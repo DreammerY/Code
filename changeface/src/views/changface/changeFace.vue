@@ -24,7 +24,8 @@
                  <div class="top_right_btn">
                     <el-button @click="generateImgs">开始生成</el-button>
                     <el-button>多图下载</el-button>
-                    <el-button @click="packDownload">打包下载</el-button>
+                    <!-- <el-button @click="packDownload">打包下载</el-button> -->
+                    <el-link :href="myip+'api/v1/result/face/download'" class="download" :underline="false">打包下载</el-link>
                 </div>
                 <imgListVue :imgList="generateList" ref="generateList"></imgListVue>
                 <paginationVue :total="generateList.length"></paginationVue>
@@ -98,11 +99,14 @@ export default {
                 })
                 return
             }
+            this.fullscreenLoading = false
             this.axios.post("/test/api/v1/dfl",{submit_cut_photo:"True"}).then((res) => {
                 if(res && res.data.code==0){
+                    this.fullscreenLoading = false
                     this.queryFaceResult()
                 }
             }).catch(() => {
+                this.fullscreenLoading = false
                 this.$message.error('生成图片失败');
             })
         },
@@ -112,8 +116,6 @@ export default {
             this.axios.get("/test/api/v1/result/face").then((res) => {
                 if(res){
                     if(!res || !res.data) return
-                    console.log(res);
-                    this.fullscreenLoading = false
                     this.generateList = res.data.select_image_list.map(item => {
                         if(this.myenv == "win"){
                              return {
@@ -175,17 +177,17 @@ export default {
                 responseType:"blob",
             }).then((res) => {
                 if(res){
-                    const content = res.data;
-                    const blob = new Blob([content], { type: "application/zip" });
-                    const fileName = "generateresult.zip";
-                    const elink = document.createElement("a");
-                    elink.download = fileName;
-                    elink.style.display = "none";
-                    elink.href = URL.createObjectURL(blob);
-                    document.body.appendChild(elink);
-                    elink.click();
-                    URL.revokeObjectURL(elink.href); // 释放URL 对象
-                    document.body.removeChild(elink);
+                    // const content = res.data;
+                    // const blob = new Blob([content], { type: "application/zip" });
+                    // const fileName = "generateresult.zip";
+                    // const elink = document.createElement("a");
+                    // elink.download = fileName;
+                    // elink.style.display = "none";
+                    // elink.href = URL.createObjectURL(blob);
+                    // document.body.appendChild(elink);
+                    // elink.click();
+                    // URL.revokeObjectURL(elink.href); // 释放URL 对象
+                    // document.body.removeChild(elink);
                 }
             }).catch(() => {
                 this.$message.error("打包下载失败")
@@ -240,6 +242,16 @@ export default {
     display: flex;
     justify-content: center;
     margin-top: 10px;
+}
+.changeface .top_right_btn .download {
+    display: inline-block;
+    cursor: pointer;
+    background: #FFF;
+    border: 1px solid #DCDFE6;
+    padding: 12px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+    margin-left: 10px;
 }
 
 .changeface .top_right {
