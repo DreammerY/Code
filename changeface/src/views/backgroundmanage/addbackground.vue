@@ -29,7 +29,7 @@
                 </div>
                 <div class="showImg" id="showImg">
                     <img src="" alt="" ref="rightImg" ondragstart="return false;">
-                    <div class="redReact" id="redReact" v-show="rightImg"></div>
+                    <div class="redReact" id="redReact" v-show="redRectShow"></div>
                 </div>
             </div>
         </div>
@@ -157,6 +157,7 @@ export default {
     },
     data(){
         return {
+            redRectShow:false,
             lchange:false,
             rchange:false,
             type:"",
@@ -186,6 +187,7 @@ export default {
         },
         handleRightChange(file){
             this.rightImg = file
+            this.redRectShow = true
             this.$refs.rightImg.src = file.url
             let reader = new FileReader()
             reader.readAsDataURL(file.raw)
@@ -244,6 +246,7 @@ export default {
                 formData.append('file', this.rightImg.raw);
             }
             console.log(this.type);
+            formData.append('type', this.type);
             formData.append('id', this.inputList.id);
             formData.append('name', this.name);
             formData.append('rj_dist', this.rj_dist);
@@ -259,6 +262,8 @@ export default {
             formData.append('person_h', this.person_h);
             this.axios.put('/test/api/v2/manage',formData).then((res) => {
                 this.$emit("closeDialog")
+                this.$emit("getTableData")
+                this.$router.go(0)
                 console.log(res);
             })
             .catch(()=>{
@@ -417,6 +422,9 @@ export default {
         if(this.inputList == "" || !this.inputList){
             return
         }
+        this.redRectShow = true
+        this.addMove()
+        this.setReactEvent()
         this.$refs.leftImg.src = this.myip+this.inputList.background_path
         this.$refs.rightImg.src = this.myip+this.inputList.refer_path
         this.name = this.inputList.name

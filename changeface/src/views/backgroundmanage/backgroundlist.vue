@@ -108,7 +108,7 @@
             title="提示"
             :visible.sync="dialogVisible"
             width="80%">
-            <addbackgroundVue  :inputList="inputList" :ifEdit="true" @closeDialog="closeDialog"></addbackgroundVue>
+            <addbackgroundVue  :inputList="inputList" :ifEdit="true" @closeDialog="closeDialog" @getTableData="getTableData"></addbackgroundVue>
         </el-dialog>
     </div>
 </template>
