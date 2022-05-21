@@ -1,10 +1,11 @@
 <template>
   <div class="hello">
     <div class="left" ref="left">
-      <div class="left_top">图像处理</div>
+      <!-- <div class="left_top">图像处理</div> -->
+      <router-link to="index" class="left_top">图像处理</router-link>
       <div>
       <el-menu 
-        default-active="1"
+        :default-active="activeIndex"
         class="el-menu-vertical-demo"
         background-color="#545c64"
         text-color="#fff"
@@ -54,14 +55,14 @@
     <!-- right -->
     <div class="right">
       <div class="right_top">
-        <el-menu :default-active="activeIndex" mode="horizontal"  background-color="#545c64"
+        <el-menu :default-active="activeIndex2" mode="horizontal"  background-color="#545c64"
           text-color="#fff" active-text-color="#ffd04b"  :router="true">
             <el-menu-item index="1" class="right_top_item">处理中心</el-menu-item>
             <el-menu-item index="2">处理中心</el-menu-item>
         </el-menu>
       </div>
       <div class="right_bottom">
-        <router-view></router-view>
+        <router-view @changIndex="changIndex"></router-view>
       </div>
     </div>
   </div>
@@ -75,9 +76,13 @@ export default {
         openShow: false,
         right_top_items:["首页","收藏"],
         activeIndex: '1',
+        activeIndex2: '1',
       };
     },
     methods: {
+      changIndex(index){
+        this.activeIndex = index
+      },
       handleClose(){
         this.$refs.left.style.display = "none"
         // this.leftShow = false
@@ -109,6 +114,8 @@ export default {
   width: 200px;
 }
 .hello .left .left_top{
+  display: block;
+  text-decoration: none;
   height: 60px;
   line-height: 60px;
   text-align: center;

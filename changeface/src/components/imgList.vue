@@ -121,6 +121,7 @@ export default {
             this.axios.post("/test/api/v1/image",param).then((res) => {
                 if(res && res.data.code == 0){
                    this.$router.push({name:'collectface'})
+                   this.$emit("changIndex",'collectface')
                  }
             }).catch(() => {
                 this.$message.error('图片收藏失败');

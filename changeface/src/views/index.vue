@@ -1,5 +1,5 @@
 <template>
-    <div class="changeface" v-loading.fullscreen.lock="fullscreenLoading">
+    <div id="index">
         <div class="top">
             <div class="top_left">
                 <div class="top_left_btn">
@@ -18,17 +18,6 @@
                 </div>
                 <imgListVue :imgList="generateImgList" ref="generateList"></imgListVue>
                 <paginationVue :total="generateList.length" @currentPageChange="generatePageChange" @pageSizeChange="generatePageSizeChange"></paginationVue>
-            </div>
-        </div>
-        <div class="bottom">
-            <div class="chooseCollect">
-                <div class="chooseCollect_top">
-                    收藏脸选择
-                </div>
-                <div class="">
-                    <imgListVue :havecheckbox="true" :imgList="collectImgList" @checkedChange="checkedChange"></imgListVue>
-                    <paginationVue  @currentPageChange="collectPageChange" @pageSizeChange="collectPageSizeChange" :total="totalCollect"></paginationVue>
-                </div>
             </div>
         </div>
     </div>
@@ -173,17 +162,7 @@ export default {
                 responseType:"blob",
             }).then((res) => {
                 if(res){
-                    // const content = res.data;
-                    // const blob = new Blob([content], { type: "application/zip" });
-                    // const fileName = "generateresult.zip";
-                    // const elink = document.createElement("a");
-                    // elink.download = fileName;
-                    // elink.style.display = "none";
-                    // elink.href = URL.createObjectURL(blob);
-                    // document.body.appendChild(elink);
-                    // elink.click();
-                    // URL.revokeObjectURL(elink.href); // 释放URL 对象
-                    // document.body.removeChild(elink);
+                    console.log("download success");
                 }
             }).catch(() => {
                 this.$message.error("打包下载失败")
@@ -215,7 +194,7 @@ export default {
         },
     },
     created(){
-        this.getCollectedImgs()
+        // this.getCollectedImgs()
     },
     computed:{
         //
@@ -251,28 +230,28 @@ export default {
 }
 </script>
 <style scoped>
-.changeface{
+#index{
     display: flex;
     flex-direction: column;
 }
-.changeface .top{
+#index .top{
      display: flex;
 }
-.changeface .top_left {
+#index .top_left {
     margin-right: 5px;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     flex:1;
 }
-.changeface .top_left #upload{
+#index .top_left #upload{
     height: 0;
     width: 0;
 }
-.changeface .top_left_btn,.top_right_btn{
+#index .top_left_btn,.top_right_btn{
     display: flex;
     justify-content: center;
     margin-top: 10px;
 }
-.changeface .top_right_btn .download {
+#index .top_right_btn .download {
     display: inline-block;
     cursor: pointer;
     background: #FFF;
@@ -283,18 +262,10 @@ export default {
     margin-left: 10px;
 }
 
-.changeface .top_right {
+#index .top_right {
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     flex:1;
 }
 /*  */
-.changeface .bottom .chooseCollect_top{
-    background-color: rgb(62, 61, 61);
-    color: #fff;
-    height: 30px;
-    line-height: 30px;
-    margin-top: 10px;
-    padding-left: 10px;
-    font-size: 14px;
-}
+
 </style>

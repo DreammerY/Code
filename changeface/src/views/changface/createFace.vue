@@ -31,8 +31,8 @@
              <el-button type="primary" class="submit" @click="submit" v-loading.fullscreen.lock="fullscreenLoading">提交</el-button>
         </div>
         <!-- <img  :src="require('../../../results/00063-generate-images/seed0005.png')" alt=""> -->
-        <imgListVue :imgList="imgList" :havecheckbox="true" :collection="true"></imgListVue>
-        <paginationVue :total="imgList.length"></paginationVue>
+        <imgListVue :imgList="imgList" :havecheckbox="true" :collection="true" @changIndex="changIndex"></imgListVue>
+        <paginationVue :total="imgList.length"  @currentPageChange="createPageChange" @pageSizeChange="createtPageSize"></paginationVue>
     </div>
 </template>
 <script>
@@ -47,17 +47,16 @@ export default {
             value: '',
             fullscreenLoading: false,
             imgList:[],
+            currentPage:1, // 第一次默认页数页码 需与分页一致
+            pageSize:10,
         }
     },
     methods:{
-        handleTypesChange(val){
-            console.log(val);
+        createPageChange(newVal){
+            this.currentPage = newVal
         },
-        handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
-        },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
+        createtPageSize(newVal){
+            this.pageSize = newVal
         },
         submit(){
             if(this.input1 >= this.input2 || this.value=='' || typeof this.input1 != "number" || typeof this.input2 != "number") {
@@ -120,6 +119,9 @@ export default {
             }).catch(() => {
                 this.$message.error('人脸图片列表获取失败');
             })
+        },
+        changIndex(index){
+            this.$emit("changIndex",index)
         }
     },
     components:{
@@ -127,7 +129,6 @@ export default {
         paginationVue,
     },
     mounted(){
-        console.log(window.location.href);
         this.getModelList()
     }
 }

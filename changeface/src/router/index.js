@@ -9,6 +9,13 @@ const routes = [
     redirect:'/createface',
   },
   {
+    path: '/index',
+    name: 'index',
+    component: function () {
+      return import('../views/index.vue')
+    }
+  },
+  {
     path: '/createface',
     name: 'createface',
     component: function () {

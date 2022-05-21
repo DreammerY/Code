@@ -167,6 +167,7 @@ export default {
             name: "",
             jt_height: "",
             person_h: 100, // 像素高 人物大小
+            person_w: 50, // 红色款宽度
             rj_dist: "",
             v_angle: "",
             person_x: 25,
@@ -180,6 +181,7 @@ export default {
             rightImg: "",
             imgWidth:'', // 图片原始宽高
             imgHeight:'',
+            currentW:'', //当前宽度
         }
     },
     methods:{
@@ -202,6 +204,7 @@ export default {
                 image.onload = () =>{
                     this.imgWidth = image.width
                     this.imgHeight= image.height
+                    this.currentW = parseInt(300/image.height *image.width)
                 }
             }
             this.addMove()
@@ -279,7 +282,6 @@ export default {
                 if(res && res.data){
                     console.log(res);
                     if(res.data.errcode == 0){
-                        console.log(this.add);
                         if(this.add){
                             this.$emit("closeAddDialog")
                             this.$emit("getTableData")
@@ -295,9 +297,10 @@ export default {
         // 添加移动
         addMove(){
             var box = document.getElementById("redReact");
-            var container = document.getElementById("showImg");
+            var container = document.getElementById("body");
+            var showImg = document.getElementById("showImg");
             const that = this
-            container.oncontextmenu = (e) => {
+            showImg.oncontextmenu = (e) => {
                 e.preventDefault()
             }
             box.onmousedown = function(event){
@@ -306,14 +309,7 @@ export default {
                 var dy = event.clientY - box.offsetTop;
 
                 container.onmousemove = function(event){
-                    // if(box.offsetLeft<0 || box.offsetTop<0){
-                    //     box.style.left = 0  +"px";
-                    //     box.style.top = 0 +"px";
-                    //     that.$message.info("不能超出图片外部")
-                    //     document.onmousemove = null;
-                    //     document.onmouseup = null;
-                    //     return
-                    // }
+                    event.cancelBubble = true
                     event = event || window.event;
                     var left = event.clientX; // 鼠标移动相对于浏览器的坐标
                     var top = event.clientY;
@@ -323,6 +319,16 @@ export default {
                     container.onmouseup = function(){
                         container.onmousemove = null;
                         container.onmouseup = null;
+                        if(box.offsetLeft<0 || box.offsetTop<0 ||
+                        box.offsetLeft>that.currentW-that.person_w || box.offsetTop>300-that.person_h){
+                            
+                            box.style.left = 0  +"px";
+                            box.style.top = 0 +"px";
+                            that.$message.info("不能超出图片外部")
+                            document.onmousemove = null;
+                            document.onmouseup = null;
+                            return
+                        }
                     };
                 };
             };
@@ -335,7 +341,7 @@ export default {
             // body监听移动事件
             document.getElementById('showImg').addEventListener('mousemove', move)
             // 鼠标按下事件
-            c.addEventListener('mousedown', down)
+            document.addEventListener('mousedown', down)
             // 鼠标松开事件
             document.getElementById('body').addEventListener('mouseup', up)
 
@@ -350,23 +356,24 @@ export default {
             
             // 鼠标松开时结束尺寸修改
             function up() {
-            resizeable = false
+                resizeable = false
             }
             
             // 鼠标按下时开启尺寸修改
             function down(e) {
-            let d = getDirection(e)
-            // 当位置为四个边和四个角时才开启尺寸修改
-            if (d !== '') {
-            resizeable = true
-            direc = d
-            clientX = e.clientX
-            clientY = e.clientY
-            }
+                let d = getDirection(e)
+                // 当位置为四个边和四个角时才开启尺寸修改
+                if (d !== '') {
+                resizeable = true
+                direc = d
+                clientX = e.clientX
+                clientY = e.clientY
+                }
             }
             
             // 鼠标移动事件
             function move(e) {
+            // e.cancelBubble = true
             let d = getDirection(e)
             let cursor
             if (d === '') cursor = 'default';
@@ -375,28 +382,28 @@ export default {
             c.style.cursor = cursor;
             // 当开启尺寸修改时，鼠标移动会修改div尺寸
             if (resizeable) {
-            // 鼠标按下的位置在右边，修改宽度
-            if (direc.indexOf('e') !== -1) {
-                c.style.width = Math.max(minW, c.offsetWidth + (e.clientX - clientX)) + 'px'
-                clientX = e.clientX
-            }
-            
-            // 鼠标按下的位置在上部，修改高度
-            if (direc.indexOf('n') !== -1) {
-                c.style.height = Math.max(minH, c.offsetHeight + (clientY - e.clientY)) + 'px'
-                clientY = e.clientY
-            }
-            // 鼠标按下的位置在底部，修改高度
-            if (direc.indexOf('s') !== -1) {
-                c.style.height = Math.max(minH, c.offsetHeight + (e.clientY - clientY)) + 'px'
-                clientY = e.clientY
-            }
-            
-            // 鼠标按下的位置在左边，修改宽度
-            if (direc.indexOf('w') !== -1) {
-                c.style.width = Math.max(minW, c.offsetWidth + (clientX - e.clientX)) + 'px'
-                clientX = e.clientX
-            }
+                // 鼠标按下的位置在右边，修改宽度
+                if (direc.indexOf('e') !== -1) {
+                    c.style.width = Math.max(minW, c.offsetWidth + (e.clientX - clientX)) + 'px'
+                    clientX = e.clientX
+                }
+                
+                // 鼠标按下的位置在上部，修改高度
+                if (direc.indexOf('n') !== -1) {
+                    c.style.height = Math.max(minH, c.offsetHeight + (clientY - e.clientY)) + 'px'
+                    clientY = e.clientY
+                }
+                // 鼠标按下的位置在底部，修改高度
+                if (direc.indexOf('s') !== -1) {
+                    c.style.height = Math.max(minH, c.offsetHeight + (e.clientY - clientY)) + 'px'
+                    clientY = e.clientY
+                }
+                
+                // 鼠标按下的位置在左边，修改宽度
+                if (direc.indexOf('w') !== -1) {
+                    c.style.width = Math.max(minW, c.offsetWidth + (clientX - e.clientX)) + 'px'
+                    clientX = e.clientX
+                }
             
             }
             var h = parseInt(c.style.height) || 100
@@ -406,6 +413,7 @@ export default {
             that.person_x = l + w/2
             that.person_y = t + h/2
             that.person_h = h
+            that.person_w = w
             }
             
             // 获取鼠标所在div的位置
@@ -454,7 +462,7 @@ export default {
         },
         rightImg(){
             this.rchange = true
-        }
+        },
     }
 }
 </script>
