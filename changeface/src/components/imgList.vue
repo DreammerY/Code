@@ -10,10 +10,12 @@
                     fit="cover"></el-image>
                     <div class="img_desc"  style="width: 80px;">
                         <span>{{ item.img_name }}</span>
-                        <!-- 收藏 -->
+                        <!-- 收藏人脸 -->
                         <input type="checkbox" ref="img_check_box" v-if="havecheckbox && collection" @change="handleCheckBox1(index,item.url2)">
-                        <!-- 单选 -->
+                        <!-- 选中收藏人脸 -->
                         <input type="checkbox" ref="img_check_box" v-if="havecheckbox && !collection" @change="handleCheckBox2(index,item.url2)">
+                        <!-- 仅仅选择 -->
+                        <!-- <input type="checkbox" ref="img_check_box" v-if="havecheckbox && collection" @change="handleCheckBox3(index,item.url2)"> -->
                     </div>
                 </div>
             </div>
@@ -54,7 +56,7 @@ export default {
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
         },
-        // 收藏复选框
+        // 收藏复选框 收藏人脸
         handleCheckBox1(index,url2){
             const list = this.$refs.img_check_box
             if(list[index].checked == true){
@@ -84,7 +86,7 @@ export default {
             });
             }
         },
-        // 单选复选框
+        // 单选复选框 选中收藏人脸时
         handleCheckBox2(index,url2){
             const list = this.$refs.img_check_box
             if(list[index].checked == true){

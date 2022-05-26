@@ -6,7 +6,7 @@
             </div>
             <el-button type="primary" class="cancel_collect">取消收藏</el-button>
         </div>
-        <imgListVue :imgList="showImgList" :havecheckbox="true"></imgListVue>
+        <imgListVue :imgList="showImgList"></imgListVue>
         <paginationVue @currentPageChange="collectPageChange" @pageSizeChange="collectPageSize" :total="total"></paginationVue>
     </div>
 </template>
