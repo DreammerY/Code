@@ -1,5 +1,5 @@
 <template>
-    <div class="cutperson">
+    <div class="cutperson" v-loading.fullscreen.lock="fullscreenLoading">
         <div class="cutperson_top">
             <div class="top">
                 <input type="file" value="上传图片" @change="handleUpload1Change" id="upload1" style="width:0;height:0">
@@ -46,6 +46,7 @@ export default {
             uploadPageSize:10,
             generateCurrentPage:1, // 第一次默认页数页码 需与分页一致
             generatePageSize:10,
+            fullscreenLoading:false,
         }
     },
     methods:{
@@ -99,8 +100,10 @@ export default {
         },
         generateImgs(){
             console.log("this.formdata",this.formdata);
-            this.axios.get("/test/api/v1/result/face",this.formdata).then((res) => {
+            this.fullscreenLoading = true
+            this.axios.post("/test/api/v2/reback",this.formdata).then((res) => {
                 if(res){
+                    this.fullscreenLoading = false
                     console.log("res",res);
                     if(!res || !res.data) return
                     this.generateList = res.data.data.select_image_list.map(item => {
@@ -114,6 +117,7 @@ export default {
                 }
             })
             .catch(() => {
+                this.fullscreenLoading = false
                 this.$message.error('查询人脸结果失败');
             })
         },
