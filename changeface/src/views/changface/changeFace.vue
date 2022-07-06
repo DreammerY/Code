@@ -124,7 +124,10 @@ export default {
                                 url: this.myip+'workspace\\data_dst\\results\\'+item
                             }
                         }
-                        
+                        //  return {
+                        //     img_name: item,
+                        //     url: this.myip+res.results_path+item
+                        // }
                    })
                    this.totalGenerate = this.generateList.length
                    console.log(this.generateList );
