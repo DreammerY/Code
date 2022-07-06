@@ -40,13 +40,12 @@ export default {
             totalGenerate:0,
             uploadList:[],
             totalUpload: 0,
-            generateImgList:[],
             formdata:new FormData(),
             upload1Flag:false, //判断1是否上传
             uploadCurrentPage:1, // 第一次默认页数页码 需与分页一致
             uploadPageSize:10,
-            genetateCurrentPage:1, // 第一次默认页数页码 需与分页一致
-            genetatePageSize:10,
+            generateCurrentPage:1, // 第一次默认页数页码 需与分页一致
+            generatePageSize:10,
         }
     },
     methods:{
@@ -104,10 +103,10 @@ export default {
                 if(res){
                     console.log("res",res);
                     if(!res || !res.data) return
-                    this.generateList = res.data.select_image_list.map(item => {
+                    this.generateList = res.data.data.select_image_list.map(item => {
                         return {
                             img_name: item,
-                            url: this.myip+res.results_path+item
+                            url: this.myip+res.data.data.results_path+item
                         }
                    })
                    this.totalGenerate = this.generateList.length

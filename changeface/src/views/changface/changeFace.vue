@@ -51,8 +51,8 @@ export default {
             uploadCurrentPage:1, // 第一次默认页数页码 需与分页一致
             uploadPageSize:10,
             totalUpload:0,
-            genetateCurrentPage:1, // 第一次默认页数页码 需与分页一致
-            genetatePageSize:10,
+            generateCurrentPage:1, // 第一次默认页数页码 需与分页一致
+            generatePageSize:10,
             totalGenetate:0,
         }
     },
