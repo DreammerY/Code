@@ -19,7 +19,8 @@
              <div class="top">
                 <!-- <el-button>保存结果</el-button>
                 <el-button class="margin">多图下载</el-button> -->
-                <el-button>打包下载</el-button>
+                <!-- <el-button>打包下载</el-button> -->
+                <el-link :href="myip+'api/v2/reback/download'" class="download" :underline="false">打包下载</el-link>
                 <paginationVue style="margin-top:0" class="margin" :total="generateList.length" @currentPageChange="generatePageChange" 
                 @pageSizeChange="generatePageSizeChange"></paginationVue>
             </div>
