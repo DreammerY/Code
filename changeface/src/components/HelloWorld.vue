@@ -95,7 +95,6 @@ export default {
         closeShow: true,
         openShow: false,
         activeIndex: '1',
-        activeIndex2: '1',
         // top tab
         editableTabsValue: 'index',
         editableTabs: [{title:"首页",name:'index',path:'index'}],
@@ -137,7 +136,7 @@ export default {
             }
           })
           if(exit){
-            this.tabClick({name:"index"})
+            this.editableTabsValue = "index"
             return
           }
           this.editableTabs = [...this.editableTabs,{title:"首页",name:"index",path:"index"}]

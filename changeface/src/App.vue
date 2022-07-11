@@ -9,6 +9,11 @@ export default {
   name: 'App',
   components:{
     HelloWorldVue
+  },
+  created() {
+    if(this.$router.path !== '/index'){
+      this.$router.replace('/index')
+    }
   }
 }
 
